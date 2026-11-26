@@ -1,0 +1,123 @@
+/* Obsess Design System — 4-Breakpoint Material-Inspired Responsive Grid
+ *
+ * Breakpoints (aligned with Material Design 3 window size classes):
+ *   1. Compact  (< 600px)   :  4 columns | 16px gutter | 16px margin | fluid
+ *   2. Medium   (>= 600px)  :  8 columns | 24px gutter | 32px margin | fluid
+ *   3. Expanded (>= 840px)  : 12 columns | 24px gutter | 48px margin | max 1200px
+ *   4. Large    (>= 1200px) : 12 columns | 32px gutter | 64px margin | max 1440px
+ */
+
+:root {
+  --obs-grid-columns: 4;
+  --obs-grid-gutter: 16px;
+  --obs-grid-margin: 16px;
+  --obs-grid-max-width: 100%;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --obs-grid-columns: 8;
+    --obs-grid-gutter: 24px;
+    --obs-grid-margin: 32px;
+    --obs-grid-max-width: 100%;
+  }
+}
+
+@media (min-width: 840px) {
+  :root {
+    --obs-grid-columns: 12;
+    --obs-grid-gutter: 24px;
+    --obs-grid-margin: 48px;
+    --obs-grid-max-width: 1200px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --obs-grid-columns: 12;
+    --obs-grid-gutter: 32px;
+    --obs-grid-margin: 64px;
+    --obs-grid-max-width: 1440px;
+  }
+}
+
+.obs-grid-container {
+  width: 100%;
+  max-width: var(--obs-grid-max-width);
+  margin-inline: auto;
+  padding-inline: var(--obs-grid-margin);
+}
+
+.obs-grid-container--fluid {
+  max-width: 100%;
+}
+
+.obs-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--obs-grid-columns), minmax(0, 1fr));
+  gap: var(--obs-grid-gutter);
+}
+
+/* Responsive grid item span & start via CSS custom properties */
+.obs-grid-item {
+  min-width: 0;
+  grid-column: var(--obs-start-compact, auto) / span var(--obs-span-compact, var(--obs-grid-columns));
+}
+
+.obs-grid-item[data-full-compact="true"] {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 600px) {
+  .obs-grid-item {
+    grid-column: var(--obs-start-medium, var(--obs-start-compact, auto)) /
+      span var(--obs-span-medium, var(--obs-span-compact, var(--obs-grid-columns)));
+  }
+
+  .obs-grid-item[data-full-medium="true"] {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 840px) {
+  .obs-grid-item {
+    grid-column: var(--obs-start-expanded, var(--obs-start-medium, var(--obs-start-compact, auto))) /
+      span var(--obs-span-expanded, var(--obs-span-medium, var(--obs-span-compact, var(--obs-grid-columns))));
+  }
+
+  .obs-grid-item[data-full-expanded="true"] {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  .obs-grid-item {
+    grid-column: var(
+        --obs-start-large,
+        var(--obs-start-expanded, var(--obs-start-medium, var(--obs-start-compact, auto)))
+      ) /
+      span
+        var(
+          --obs-span-large,
+          var(--obs-span-expanded, var(--obs-span-medium, var(--obs-span-compact, var(--obs-grid-columns))))
+        );
+  }
+
+  .obs-grid-item[data-full-large="true"] {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Visual layout grid overlay */
+.obs-grid-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.obs-grid-overlay__column {
+  height: 100%;
+  background-color: hsl(var(--accent) / 0.09);
+  border-inline: 1px dashed hsl(var(--accent) / 0.25);
+}

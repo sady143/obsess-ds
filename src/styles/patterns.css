@@ -17,12 +17,12 @@ h1, h2, h3, h4, h5, h6 {
 .obs-glass-tile,
 .glass-work-tile {
   border-radius: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--obs-glass-border, rgba(0, 0, 0, 0.06));
+  background: var(--obs-glass-fill, rgba(255, 255, 255, 0.45));
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.85),
-    0 8px 32px -6px rgba(0, 0, 0, 0.1),
-    0 2px 8px -2px rgba(0, 0, 0, 0.06);
+    inset 0 1px 0 0 var(--obs-glass-highlight, rgba(255, 255, 255, 0.85)),
+    0 8px 32px -6px var(--obs-shadow-tile, rgba(0, 0, 0, 0.1)),
+    0 2px 8px -2px var(--obs-glass-border, rgba(0, 0, 0, 0.06));
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
 }
@@ -30,9 +30,9 @@ h1, h2, h3, h4, h5, h6 {
 .obs-glass-tile:hover,
 .glass-work-tile:hover {
   border-color: hsl(var(--accent) / 0.35);
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--obs-glass-fill-hover, rgba(255, 255, 255, 0.65));
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 1px 0 0 var(--obs-glass-highlight-hover, rgba(255, 255, 255, 0.95)),
     0 12px 40px -8px rgba(0, 0, 0, 0.12),
     0 4px 12px -2px rgba(0, 0, 0, 0.08);
 }

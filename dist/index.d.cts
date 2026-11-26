@@ -1,6 +1,6 @@
 import { ClassValue } from 'clsx';
 import * as React$1 from 'react';
-import { ReactNode, ComponentType } from 'react';
+import { ReactNode, ComponentType, ElementType, CSSProperties, FormEvent } from 'react';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import { VariantProps } from 'class-variance-authority';
@@ -48,6 +48,22 @@ import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
 
 declare function obsCn(...inputs: ClassValue[]): string;
+
+type ObsColorGroup = "brand" | "semantic" | "neutral" | "sidebar" | "surface";
+interface ObsColorToken {
+    name: string;
+    token: string;
+    hsl?: string;
+    hex?: string;
+    value: string;
+    group: ObsColorGroup;
+    usage: string;
+}
+/**
+ * Equal-weight color registry for Obsess Design System (@sady143/obsess-ds).
+ * Covers all brand/editorial, semantic UI, neutral ramp, dark sidebar, and glass surface colors.
+ */
+declare const OBS_COLORS: readonly ObsColorToken[];
 
 declare function useIsMobile(): boolean;
 
@@ -151,6 +167,123 @@ declare const ObsNDABanner: ({ className }: {
     className?: string;
 }) => React$1.JSX.Element;
 
+type ObsBreakpoint = "compact" | "medium" | "expanded" | "large";
+interface ObsBreakpointSpec {
+    key: ObsBreakpoint;
+    label: string;
+    minWidth: number;
+    maxWidthLabel: string;
+    columns: number;
+    gutter: number;
+    margin: number;
+    maxContainerWidth: number | null;
+}
+/**
+ * 4-breakpoint responsive grid specification inspired by Material Design 3 window size classes.
+ */
+declare const OBS_GRID_BREAKPOINTS: Record<ObsBreakpoint, ObsBreakpointSpec>;
+declare function resolveObsBreakpoint(width: number): ObsBreakpoint;
+interface ObsBreakpointState extends ObsBreakpointSpec {
+    viewportWidth: number;
+}
+declare function useObsBreakpoint(): ObsBreakpointState;
+interface ObsGridContainerProps {
+    children: ReactNode;
+    fluid?: boolean;
+    as?: ElementType;
+    className?: string;
+    style?: CSSProperties;
+}
+declare const ObsGridContainer: ({ children, fluid, as: Component, className, style, }: ObsGridContainerProps) => React$1.JSX.Element;
+interface ObsGridProps {
+    children: ReactNode;
+    /** Wrap the grid in an `ObsGridContainer` with responsive margins and max-width. Defaults to `true`. */
+    contained?: boolean;
+    /** Disable max-width clamping when `contained` is true. */
+    fluid?: boolean;
+    as?: ElementType;
+    className?: string;
+    containerClassName?: string;
+    style?: CSSProperties;
+}
+declare const ObsGrid: ({ children, contained, fluid, as: Component, className, containerClassName, style, }: ObsGridProps) => React$1.JSX.Element;
+type ObsGridSpanValue = number | "full";
+type ObsResponsiveSpan = ObsGridSpanValue | Partial<Record<ObsBreakpoint, ObsGridSpanValue>>;
+type ObsResponsiveStart = number | Partial<Record<ObsBreakpoint, number>>;
+interface ObsGridItemProps {
+    children: ReactNode;
+    /** Number of columns to span, `"full"`, or a per-breakpoint map (`compact`, `medium`, `expanded`, `large`). */
+    span?: ObsResponsiveSpan;
+    /** Starting column line (1-indexed), or a per-breakpoint map. */
+    start?: ObsResponsiveStart;
+    as?: ElementType;
+    className?: string;
+    style?: CSSProperties;
+}
+declare const ObsGridItem: ({ children, span, start, as: Component, className, style, }: ObsGridItemProps) => React$1.JSX.Element;
+interface ObsGridOverlayProps {
+    visible?: boolean;
+    fluid?: boolean;
+    className?: string;
+}
+/**
+ * Visual column/margin/gutter guide overlay for inspecting layout alignment across all 4 breakpoints.
+ */
+declare const ObsGridOverlay: ({ visible, fluid, className }: ObsGridOverlayProps) => React$1.JSX.Element;
+
+declare const buttonVariants: (props?: {
+    variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost";
+    size?: "default" | "icon" | "sm" | "lg";
+} & class_variance_authority_types.ClassProp) => string;
+interface ButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+    asChild?: boolean;
+}
+declare const Button: React$1.ForwardRefExoticComponent<ButtonProps & React$1.RefAttributes<HTMLButtonElement>>;
+
+type ObsModalSize = "sm" | "md" | "lg" | "xl" | "full";
+interface ObsModalProps {
+    /** Controlled open state. */
+    open?: boolean;
+    /** Controlled open state change handler. */
+    onOpenChange?: (open: boolean) => void;
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean;
+    /** Optional trigger element rendered via `DialogTrigger asChild`. */
+    trigger?: ReactNode;
+    /** Optional editorial eyebrow displayed above the modal title. */
+    eyebrow?: ReactNode;
+    /** Modal heading (rendered in `ObsDialogTitle`). */
+    title?: ReactNode;
+    /** Optional supporting copy below the title. */
+    description?: ReactNode;
+    /** Flexible slot body — supports arbitrary layouts, cards, media, or form fields. */
+    children: ReactNode;
+    /** Optional custom footer slot. Overrides default form Cancel/Submit buttons when provided. */
+    footer?: ReactNode;
+    /**
+     * When provided, wraps the modal body and footer in a `<form>` element so native
+     * form submission (Enter key + submit button) works out of the box.
+     */
+    onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
+    /** Label for the default submit button when `onSubmit` is used without a custom `footer`. */
+    submitLabel?: string;
+    /** Label for the default cancel button when `onSubmit` is used without a custom `footer`. */
+    cancelLabel?: string;
+    /** Disables submit button and shows busy state when `onSubmit` is used. */
+    submitting?: boolean;
+    /** Button variant for the default submit button. */
+    submitVariant?: ButtonProps["variant"];
+    /** Width preset for the modal surface. Defaults to `"md"`. */
+    size?: ObsModalSize;
+    /** Keeps header & footer pinned while the slot body scrolls on tall content. Defaults to `true`. */
+    scrollable?: boolean;
+    /** Additional classes applied to the modal content panel. */
+    className?: string;
+    /** Additional classes applied to the body slot container. */
+    bodyClassName?: string;
+}
+declare const ObsModal: ({ open, onOpenChange, defaultOpen, trigger, eyebrow, title, description, children, footer, onSubmit, submitLabel, cancelLabel, submitting, submitVariant, size, scrollable, className, bodyClassName, }: ObsModalProps) => React$1.JSX.Element;
+
 declare const Accordion: React$1.ForwardRefExoticComponent<(AccordionPrimitive.AccordionSingleProps | AccordionPrimitive.AccordionMultipleProps) & React$1.RefAttributes<HTMLDivElement>>;
 declare const AccordionItem: React$1.ForwardRefExoticComponent<Omit<AccordionPrimitive.AccordionItemProps & React$1.RefAttributes<HTMLDivElement>, "ref"> & React$1.RefAttributes<HTMLDivElement>>;
 declare const AccordionTrigger: React$1.ForwardRefExoticComponent<Omit<AccordionPrimitive.AccordionTriggerProps & React$1.RefAttributes<HTMLButtonElement>, "ref"> & React$1.RefAttributes<HTMLButtonElement>>;
@@ -210,15 +343,6 @@ declare const BreadcrumbEllipsis: {
     ({ className, ...props }: React$1.ComponentProps<"span">): React$1.JSX.Element;
     displayName: string;
 };
-
-declare const buttonVariants: (props?: {
-    variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost";
-    size?: "default" | "icon" | "sm" | "lg";
-} & class_variance_authority_types.ClassProp) => string;
-interface ButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-    asChild?: boolean;
-}
-declare const Button: React$1.ForwardRefExoticComponent<ButtonProps & React$1.RefAttributes<HTMLButtonElement>>;
 
 type CalendarProps = React$1.ComponentProps<typeof DayPicker>;
 declare function Calendar({ className, classNames, showOutsideDays, ...props }: CalendarProps): React$1.JSX.Element;
@@ -508,7 +632,7 @@ declare const HoverCard: React$1.FC<HoverCardPrimitive.HoverCardProps>;
 declare const HoverCardTrigger: React$1.ForwardRefExoticComponent<HoverCardPrimitive.HoverCardTriggerProps & React$1.RefAttributes<HTMLAnchorElement>>;
 declare const HoverCardContent: React$1.ForwardRefExoticComponent<Omit<HoverCardPrimitive.HoverCardContentProps & React$1.RefAttributes<HTMLDivElement>, "ref"> & React$1.RefAttributes<HTMLDivElement>>;
 
-declare const InputOTP: React$1.ForwardRefExoticComponent<(Omit<Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "nonce" | "onChange" | "value" | "maxLength" | "textAlign" | "onComplete" | "pushPasswordManagerStrategy" | "pasteTransformer" | "containerClassName" | "noScriptCSSFallback"> & {
+declare const InputOTP: React$1.ForwardRefExoticComponent<(Omit<Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "nonce" | "onChange" | "value" | "maxLength" | "containerClassName" | "textAlign" | "onComplete" | "pushPasswordManagerStrategy" | "pasteTransformer" | "noScriptCSSFallback"> & {
     value?: string;
     onChange?: (newValue: string) => unknown;
     maxLength: number;
@@ -522,7 +646,7 @@ declare const InputOTP: React$1.ForwardRefExoticComponent<(Omit<Omit<React$1.Inp
 } & {
     render: (props: input_otp.RenderProps) => React$1.ReactNode;
     children?: never;
-} & React$1.RefAttributes<HTMLInputElement>, "ref"> | Omit<Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "nonce" | "onChange" | "value" | "maxLength" | "textAlign" | "onComplete" | "pushPasswordManagerStrategy" | "pasteTransformer" | "containerClassName" | "noScriptCSSFallback"> & {
+} & React$1.RefAttributes<HTMLInputElement>, "ref"> | Omit<Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "nonce" | "onChange" | "value" | "maxLength" | "containerClassName" | "textAlign" | "onComplete" | "pushPasswordManagerStrategy" | "pasteTransformer" | "noScriptCSSFallback"> & {
     value?: string;
     onChange?: (newValue: string) => unknown;
     maxLength: number;
@@ -795,4 +919,4 @@ declare const Toggle: React$1.ForwardRefExoticComponent<Omit<TogglePrimitive.Tog
     size?: "default" | "sm" | "lg";
 } & class_variance_authority_types.ClassProp) => string> & React$1.RefAttributes<HTMLButtonElement>>;
 
-export { Accordion as ObsAccordion, AccordionContent as ObsAccordionContent, AccordionItem as ObsAccordionItem, AccordionTrigger as ObsAccordionTrigger, Alert as ObsAlert, AlertDescription as ObsAlertDescription, AlertDialog as ObsAlertDialog, AlertDialogAction as ObsAlertDialogAction, AlertDialogCancel as ObsAlertDialogCancel, AlertDialogContent as ObsAlertDialogContent, AlertDialogDescription as ObsAlertDialogDescription, AlertDialogFooter as ObsAlertDialogFooter, AlertDialogHeader as ObsAlertDialogHeader, AlertDialogOverlay as ObsAlertDialogOverlay, AlertDialogPortal as ObsAlertDialogPortal, AlertDialogTitle as ObsAlertDialogTitle, AlertDialogTrigger as ObsAlertDialogTrigger, AlertTitle as ObsAlertTitle, AspectRatio as ObsAspectRatio, Avatar as ObsAvatar, AvatarFallback as ObsAvatarFallback, AvatarImage as ObsAvatarImage, Badge as ObsBadge, type BadgeProps as ObsBadgeProps, Breadcrumb as ObsBreadcrumb, BreadcrumbEllipsis as ObsBreadcrumbEllipsis, BreadcrumbItem as ObsBreadcrumbItem, BreadcrumbLink as ObsBreadcrumbLink, type ObsBreadcrumbLinkProps, BreadcrumbList as ObsBreadcrumbList, BreadcrumbPage as ObsBreadcrumbPage, BreadcrumbSeparator as ObsBreadcrumbSeparator, ObsBreadcrumbs, type ObsBreadcrumbsItem, type ObsBreadcrumbsProps, Button as ObsButton, type ButtonProps as ObsButtonProps, Calendar as ObsCalendar, type CalendarProps as ObsCalendarProps, Card as ObsCard, CardContent as ObsCardContent, CardDescription as ObsCardDescription, CardFooter as ObsCardFooter, CardHeader as ObsCardHeader, CardTitle as ObsCardTitle, Carousel as ObsCarousel, type CarouselApi as ObsCarouselApi, CarouselContent as ObsCarouselContent, CarouselItem as ObsCarouselItem, CarouselNext as ObsCarouselNext, CarouselPrevious as ObsCarouselPrevious, type ChartConfig as ObsChartConfig, ChartContainer as ObsChartContainer, ChartLegend as ObsChartLegend, ChartLegendContent as ObsChartLegendContent, ChartStyle as ObsChartStyle, ChartTooltip as ObsChartTooltip, ChartTooltipContent as ObsChartTooltipContent, Checkbox as ObsCheckbox, Collapsible as ObsCollapsible, CollapsibleContent as ObsCollapsibleContent, CollapsibleTrigger as ObsCollapsibleTrigger, Command as ObsCommand, CommandDialog as ObsCommandDialog, CommandEmpty as ObsCommandEmpty, CommandGroup as ObsCommandGroup, CommandInput as ObsCommandInput, CommandItem as ObsCommandItem, CommandList as ObsCommandList, CommandSeparator as ObsCommandSeparator, CommandShortcut as ObsCommandShortcut, ContextMenu as ObsContextMenu, ContextMenuCheckboxItem as ObsContextMenuCheckboxItem, ContextMenuContent as ObsContextMenuContent, ContextMenuGroup as ObsContextMenuGroup, ContextMenuItem as ObsContextMenuItem, ContextMenuLabel as ObsContextMenuLabel, ContextMenuPortal as ObsContextMenuPortal, ContextMenuRadioGroup as ObsContextMenuRadioGroup, ContextMenuRadioItem as ObsContextMenuRadioItem, ContextMenuSeparator as ObsContextMenuSeparator, ContextMenuShortcut as ObsContextMenuShortcut, ContextMenuSub as ObsContextMenuSub, ContextMenuSubContent as ObsContextMenuSubContent, ContextMenuSubTrigger as ObsContextMenuSubTrigger, ContextMenuTrigger as ObsContextMenuTrigger, Dialog as ObsDialog, DialogClose as ObsDialogClose, DialogContent as ObsDialogContent, DialogDescription as ObsDialogDescription, DialogFooter as ObsDialogFooter, DialogHeader as ObsDialogHeader, DialogOverlay as ObsDialogOverlay, DialogPortal as ObsDialogPortal, DialogTitle as ObsDialogTitle, DialogTrigger as ObsDialogTrigger, Drawer as ObsDrawer, DrawerClose as ObsDrawerClose, DrawerContent as ObsDrawerContent, DrawerDescription as ObsDrawerDescription, DrawerFooter as ObsDrawerFooter, DrawerHeader as ObsDrawerHeader, DrawerOverlay as ObsDrawerOverlay, DrawerPortal as ObsDrawerPortal, DrawerTitle as ObsDrawerTitle, DrawerTrigger as ObsDrawerTrigger, DropdownMenu as ObsDropdownMenu, DropdownMenuCheckboxItem as ObsDropdownMenuCheckboxItem, DropdownMenuContent as ObsDropdownMenuContent, DropdownMenuGroup as ObsDropdownMenuGroup, DropdownMenuItem as ObsDropdownMenuItem, DropdownMenuLabel as ObsDropdownMenuLabel, DropdownMenuPortal as ObsDropdownMenuPortal, DropdownMenuRadioGroup as ObsDropdownMenuRadioGroup, DropdownMenuRadioItem as ObsDropdownMenuRadioItem, DropdownMenuSeparator as ObsDropdownMenuSeparator, DropdownMenuShortcut as ObsDropdownMenuShortcut, DropdownMenuSub as ObsDropdownMenuSub, DropdownMenuSubContent as ObsDropdownMenuSubContent, DropdownMenuSubTrigger as ObsDropdownMenuSubTrigger, DropdownMenuTrigger as ObsDropdownMenuTrigger, ObsFadeIn, type ObsFadeInProps, Form as ObsForm, FormControl as ObsFormControl, FormDescription as ObsFormDescription, FormField as ObsFormField, FormItem as ObsFormItem, FormLabel as ObsFormLabel, FormMessage as ObsFormMessage, HoverCard as ObsHoverCard, HoverCardContent as ObsHoverCardContent, HoverCardTrigger as ObsHoverCardTrigger, Input as ObsInput, InputOTP as ObsInputOTP, InputOTPGroup as ObsInputOTPGroup, InputOTPSeparator as ObsInputOTPSeparator, InputOTPSlot as ObsInputOTPSlot, Label as ObsLabel, ObsMarquee, type ObsMarqueeProps, Menubar as ObsMenubar, MenubarCheckboxItem as ObsMenubarCheckboxItem, MenubarContent as ObsMenubarContent, MenubarGroup as ObsMenubarGroup, MenubarItem as ObsMenubarItem, MenubarLabel as ObsMenubarLabel, MenubarMenu as ObsMenubarMenu, MenubarPortal as ObsMenubarPortal, MenubarRadioGroup as ObsMenubarRadioGroup, MenubarRadioItem as ObsMenubarRadioItem, MenubarSeparator as ObsMenubarSeparator, MenubarShortcut as ObsMenubarShortcut, MenubarSub as ObsMenubarSub, MenubarSubContent as ObsMenubarSubContent, MenubarSubTrigger as ObsMenubarSubTrigger, MenubarTrigger as ObsMenubarTrigger, ObsNDABanner, NavigationMenu as ObsNavigationMenu, NavigationMenuContent as ObsNavigationMenuContent, NavigationMenuIndicator as ObsNavigationMenuIndicator, NavigationMenuItem as ObsNavigationMenuItem, NavigationMenuLink as ObsNavigationMenuLink, NavigationMenuList as ObsNavigationMenuList, NavigationMenuTrigger as ObsNavigationMenuTrigger, NavigationMenuViewport as ObsNavigationMenuViewport, ObsNoticeBanner, type ObsNoticeBannerProps, Pagination as ObsPagination, PaginationContent as ObsPaginationContent, PaginationEllipsis as ObsPaginationEllipsis, PaginationItem as ObsPaginationItem, PaginationLink as ObsPaginationLink, PaginationNext as ObsPaginationNext, PaginationPrevious as ObsPaginationPrevious, Popover as ObsPopover, PopoverContent as ObsPopoverContent, PopoverTrigger as ObsPopoverTrigger, Progress as ObsProgress, RadioGroup as ObsRadioGroup, RadioGroupItem as ObsRadioGroupItem, ResizableHandle as ObsResizableHandle, ResizablePanel as ObsResizablePanel, ResizablePanelGroup as ObsResizablePanelGroup, ScrollArea as ObsScrollArea, ScrollBar as ObsScrollBar, Select as ObsSelect, SelectContent as ObsSelectContent, SelectGroup as ObsSelectGroup, SelectItem as ObsSelectItem, SelectLabel as ObsSelectLabel, SelectScrollDownButton as ObsSelectScrollDownButton, SelectScrollUpButton as ObsSelectScrollUpButton, SelectSeparator as ObsSelectSeparator, SelectTrigger as ObsSelectTrigger, SelectValue as ObsSelectValue, Separator as ObsSeparator, Sheet as ObsSheet, SheetClose as ObsSheetClose, SheetContent as ObsSheetContent, SheetDescription as ObsSheetDescription, SheetFooter as ObsSheetFooter, SheetHeader as ObsSheetHeader, SheetOverlay as ObsSheetOverlay, SheetPortal as ObsSheetPortal, SheetTitle as ObsSheetTitle, SheetTrigger as ObsSheetTrigger, Sidebar as ObsSidebar, SidebarContent as ObsSidebarContent, SidebarFooter as ObsSidebarFooter, SidebarGroup as ObsSidebarGroup, SidebarGroupAction as ObsSidebarGroupAction, SidebarGroupContent as ObsSidebarGroupContent, SidebarGroupLabel as ObsSidebarGroupLabel, SidebarHeader as ObsSidebarHeader, SidebarInput as ObsSidebarInput, SidebarInset as ObsSidebarInset, SidebarMenu as ObsSidebarMenu, SidebarMenuAction as ObsSidebarMenuAction, SidebarMenuBadge as ObsSidebarMenuBadge, SidebarMenuButton as ObsSidebarMenuButton, SidebarMenuItem as ObsSidebarMenuItem, SidebarMenuSkeleton as ObsSidebarMenuSkeleton, SidebarMenuSub as ObsSidebarMenuSub, SidebarMenuSubButton as ObsSidebarMenuSubButton, SidebarMenuSubItem as ObsSidebarMenuSubItem, SidebarProvider as ObsSidebarProvider, SidebarRail as ObsSidebarRail, SidebarSeparator as ObsSidebarSeparator, SidebarTrigger as ObsSidebarTrigger, ObsSiteMasthead, type ObsSiteMastheadProps, Skeleton as ObsSkeleton, Slider as ObsSlider, Toaster$1 as ObsSonnerToaster, Switch as ObsSwitch, Table as ObsTable, TableBody as ObsTableBody, TableCaption as ObsTableCaption, TableCell as ObsTableCell, TableFooter as ObsTableFooter, TableHead as ObsTableHead, TableHeader as ObsTableHeader, TableRow as ObsTableRow, Tabs as ObsTabs, TabsContent as ObsTabsContent, TabsList as ObsTabsList, TabsTrigger as ObsTabsTrigger, Textarea as ObsTextarea, type TextareaProps as ObsTextareaProps, Toast$1 as ObsToast, ToastAction as ObsToastAction, type ToastActionElement as ObsToastActionElement, ToastClose as ObsToastClose, ToastDescription as ObsToastDescription, type ToastProps as ObsToastProps, ToastProvider as ObsToastProvider, ToastTitle as ObsToastTitle, ToastViewport as ObsToastViewport, Toaster as ObsToaster, Toggle as ObsToggle, ToggleGroup as ObsToggleGroup, ToggleGroupItem as ObsToggleGroupItem, Tooltip as ObsTooltip, TooltipContent as ObsTooltipContent, TooltipProvider as ObsTooltipProvider, TooltipTrigger as ObsTooltipTrigger, obsCn as cn, badgeVariants as obsBadgeVariants, buttonVariants as obsButtonVariants, obsCn, navigationMenuTriggerStyle as obsNavigationMenuTriggerStyle, toast as obsToast, toggleVariants as obsToggleVariants, useFormField as useObsFormField, useIsMobile as useObsMobile, useSidebar as useObsSidebar, useToast as useObsToast };
+export { OBS_COLORS, OBS_GRID_BREAKPOINTS, Accordion as ObsAccordion, AccordionContent as ObsAccordionContent, AccordionItem as ObsAccordionItem, AccordionTrigger as ObsAccordionTrigger, Alert as ObsAlert, AlertDescription as ObsAlertDescription, AlertDialog as ObsAlertDialog, AlertDialogAction as ObsAlertDialogAction, AlertDialogCancel as ObsAlertDialogCancel, AlertDialogContent as ObsAlertDialogContent, AlertDialogDescription as ObsAlertDialogDescription, AlertDialogFooter as ObsAlertDialogFooter, AlertDialogHeader as ObsAlertDialogHeader, AlertDialogOverlay as ObsAlertDialogOverlay, AlertDialogPortal as ObsAlertDialogPortal, AlertDialogTitle as ObsAlertDialogTitle, AlertDialogTrigger as ObsAlertDialogTrigger, AlertTitle as ObsAlertTitle, AspectRatio as ObsAspectRatio, Avatar as ObsAvatar, AvatarFallback as ObsAvatarFallback, AvatarImage as ObsAvatarImage, Badge as ObsBadge, type BadgeProps as ObsBadgeProps, Breadcrumb as ObsBreadcrumb, BreadcrumbEllipsis as ObsBreadcrumbEllipsis, BreadcrumbItem as ObsBreadcrumbItem, BreadcrumbLink as ObsBreadcrumbLink, type ObsBreadcrumbLinkProps, BreadcrumbList as ObsBreadcrumbList, BreadcrumbPage as ObsBreadcrumbPage, BreadcrumbSeparator as ObsBreadcrumbSeparator, ObsBreadcrumbs, type ObsBreadcrumbsItem, type ObsBreadcrumbsProps, type ObsBreakpoint, type ObsBreakpointSpec, type ObsBreakpointState, Button as ObsButton, type ButtonProps as ObsButtonProps, Calendar as ObsCalendar, type CalendarProps as ObsCalendarProps, Card as ObsCard, CardContent as ObsCardContent, CardDescription as ObsCardDescription, CardFooter as ObsCardFooter, CardHeader as ObsCardHeader, CardTitle as ObsCardTitle, Carousel as ObsCarousel, type CarouselApi as ObsCarouselApi, CarouselContent as ObsCarouselContent, CarouselItem as ObsCarouselItem, CarouselNext as ObsCarouselNext, CarouselPrevious as ObsCarouselPrevious, type ChartConfig as ObsChartConfig, ChartContainer as ObsChartContainer, ChartLegend as ObsChartLegend, ChartLegendContent as ObsChartLegendContent, ChartStyle as ObsChartStyle, ChartTooltip as ObsChartTooltip, ChartTooltipContent as ObsChartTooltipContent, Checkbox as ObsCheckbox, Collapsible as ObsCollapsible, CollapsibleContent as ObsCollapsibleContent, CollapsibleTrigger as ObsCollapsibleTrigger, type ObsColorGroup, type ObsColorToken, Command as ObsCommand, CommandDialog as ObsCommandDialog, CommandEmpty as ObsCommandEmpty, CommandGroup as ObsCommandGroup, CommandInput as ObsCommandInput, CommandItem as ObsCommandItem, CommandList as ObsCommandList, CommandSeparator as ObsCommandSeparator, CommandShortcut as ObsCommandShortcut, ContextMenu as ObsContextMenu, ContextMenuCheckboxItem as ObsContextMenuCheckboxItem, ContextMenuContent as ObsContextMenuContent, ContextMenuGroup as ObsContextMenuGroup, ContextMenuItem as ObsContextMenuItem, ContextMenuLabel as ObsContextMenuLabel, ContextMenuPortal as ObsContextMenuPortal, ContextMenuRadioGroup as ObsContextMenuRadioGroup, ContextMenuRadioItem as ObsContextMenuRadioItem, ContextMenuSeparator as ObsContextMenuSeparator, ContextMenuShortcut as ObsContextMenuShortcut, ContextMenuSub as ObsContextMenuSub, ContextMenuSubContent as ObsContextMenuSubContent, ContextMenuSubTrigger as ObsContextMenuSubTrigger, ContextMenuTrigger as ObsContextMenuTrigger, Dialog as ObsDialog, DialogClose as ObsDialogClose, DialogContent as ObsDialogContent, DialogDescription as ObsDialogDescription, DialogFooter as ObsDialogFooter, DialogHeader as ObsDialogHeader, DialogOverlay as ObsDialogOverlay, DialogPortal as ObsDialogPortal, DialogTitle as ObsDialogTitle, DialogTrigger as ObsDialogTrigger, Drawer as ObsDrawer, DrawerClose as ObsDrawerClose, DrawerContent as ObsDrawerContent, DrawerDescription as ObsDrawerDescription, DrawerFooter as ObsDrawerFooter, DrawerHeader as ObsDrawerHeader, DrawerOverlay as ObsDrawerOverlay, DrawerPortal as ObsDrawerPortal, DrawerTitle as ObsDrawerTitle, DrawerTrigger as ObsDrawerTrigger, DropdownMenu as ObsDropdownMenu, DropdownMenuCheckboxItem as ObsDropdownMenuCheckboxItem, DropdownMenuContent as ObsDropdownMenuContent, DropdownMenuGroup as ObsDropdownMenuGroup, DropdownMenuItem as ObsDropdownMenuItem, DropdownMenuLabel as ObsDropdownMenuLabel, DropdownMenuPortal as ObsDropdownMenuPortal, DropdownMenuRadioGroup as ObsDropdownMenuRadioGroup, DropdownMenuRadioItem as ObsDropdownMenuRadioItem, DropdownMenuSeparator as ObsDropdownMenuSeparator, DropdownMenuShortcut as ObsDropdownMenuShortcut, DropdownMenuSub as ObsDropdownMenuSub, DropdownMenuSubContent as ObsDropdownMenuSubContent, DropdownMenuSubTrigger as ObsDropdownMenuSubTrigger, DropdownMenuTrigger as ObsDropdownMenuTrigger, ObsFadeIn, type ObsFadeInProps, Form as ObsForm, FormControl as ObsFormControl, FormDescription as ObsFormDescription, FormField as ObsFormField, FormItem as ObsFormItem, FormLabel as ObsFormLabel, FormMessage as ObsFormMessage, ObsGrid, ObsGridContainer, type ObsGridContainerProps, ObsGridItem, type ObsGridItemProps, ObsGridOverlay, type ObsGridOverlayProps, type ObsGridProps, type ObsGridSpanValue, HoverCard as ObsHoverCard, HoverCardContent as ObsHoverCardContent, HoverCardTrigger as ObsHoverCardTrigger, Input as ObsInput, InputOTP as ObsInputOTP, InputOTPGroup as ObsInputOTPGroup, InputOTPSeparator as ObsInputOTPSeparator, InputOTPSlot as ObsInputOTPSlot, Label as ObsLabel, ObsMarquee, type ObsMarqueeProps, Menubar as ObsMenubar, MenubarCheckboxItem as ObsMenubarCheckboxItem, MenubarContent as ObsMenubarContent, MenubarGroup as ObsMenubarGroup, MenubarItem as ObsMenubarItem, MenubarLabel as ObsMenubarLabel, MenubarMenu as ObsMenubarMenu, MenubarPortal as ObsMenubarPortal, MenubarRadioGroup as ObsMenubarRadioGroup, MenubarRadioItem as ObsMenubarRadioItem, MenubarSeparator as ObsMenubarSeparator, MenubarShortcut as ObsMenubarShortcut, MenubarSub as ObsMenubarSub, MenubarSubContent as ObsMenubarSubContent, MenubarSubTrigger as ObsMenubarSubTrigger, MenubarTrigger as ObsMenubarTrigger, ObsModal, type ObsModalProps, type ObsModalSize, ObsNDABanner, NavigationMenu as ObsNavigationMenu, NavigationMenuContent as ObsNavigationMenuContent, NavigationMenuIndicator as ObsNavigationMenuIndicator, NavigationMenuItem as ObsNavigationMenuItem, NavigationMenuLink as ObsNavigationMenuLink, NavigationMenuList as ObsNavigationMenuList, NavigationMenuTrigger as ObsNavigationMenuTrigger, NavigationMenuViewport as ObsNavigationMenuViewport, ObsNoticeBanner, type ObsNoticeBannerProps, Pagination as ObsPagination, PaginationContent as ObsPaginationContent, PaginationEllipsis as ObsPaginationEllipsis, PaginationItem as ObsPaginationItem, PaginationLink as ObsPaginationLink, PaginationNext as ObsPaginationNext, PaginationPrevious as ObsPaginationPrevious, Popover as ObsPopover, PopoverContent as ObsPopoverContent, PopoverTrigger as ObsPopoverTrigger, Progress as ObsProgress, RadioGroup as ObsRadioGroup, RadioGroupItem as ObsRadioGroupItem, ResizableHandle as ObsResizableHandle, ResizablePanel as ObsResizablePanel, ResizablePanelGroup as ObsResizablePanelGroup, type ObsResponsiveSpan, type ObsResponsiveStart, ScrollArea as ObsScrollArea, ScrollBar as ObsScrollBar, Select as ObsSelect, SelectContent as ObsSelectContent, SelectGroup as ObsSelectGroup, SelectItem as ObsSelectItem, SelectLabel as ObsSelectLabel, SelectScrollDownButton as ObsSelectScrollDownButton, SelectScrollUpButton as ObsSelectScrollUpButton, SelectSeparator as ObsSelectSeparator, SelectTrigger as ObsSelectTrigger, SelectValue as ObsSelectValue, Separator as ObsSeparator, Sheet as ObsSheet, SheetClose as ObsSheetClose, SheetContent as ObsSheetContent, SheetDescription as ObsSheetDescription, SheetFooter as ObsSheetFooter, SheetHeader as ObsSheetHeader, SheetOverlay as ObsSheetOverlay, SheetPortal as ObsSheetPortal, SheetTitle as ObsSheetTitle, SheetTrigger as ObsSheetTrigger, Sidebar as ObsSidebar, SidebarContent as ObsSidebarContent, SidebarFooter as ObsSidebarFooter, SidebarGroup as ObsSidebarGroup, SidebarGroupAction as ObsSidebarGroupAction, SidebarGroupContent as ObsSidebarGroupContent, SidebarGroupLabel as ObsSidebarGroupLabel, SidebarHeader as ObsSidebarHeader, SidebarInput as ObsSidebarInput, SidebarInset as ObsSidebarInset, SidebarMenu as ObsSidebarMenu, SidebarMenuAction as ObsSidebarMenuAction, SidebarMenuBadge as ObsSidebarMenuBadge, SidebarMenuButton as ObsSidebarMenuButton, SidebarMenuItem as ObsSidebarMenuItem, SidebarMenuSkeleton as ObsSidebarMenuSkeleton, SidebarMenuSub as ObsSidebarMenuSub, SidebarMenuSubButton as ObsSidebarMenuSubButton, SidebarMenuSubItem as ObsSidebarMenuSubItem, SidebarProvider as ObsSidebarProvider, SidebarRail as ObsSidebarRail, SidebarSeparator as ObsSidebarSeparator, SidebarTrigger as ObsSidebarTrigger, ObsSiteMasthead, type ObsSiteMastheadProps, Skeleton as ObsSkeleton, Slider as ObsSlider, Toaster$1 as ObsSonnerToaster, Switch as ObsSwitch, Table as ObsTable, TableBody as ObsTableBody, TableCaption as ObsTableCaption, TableCell as ObsTableCell, TableFooter as ObsTableFooter, TableHead as ObsTableHead, TableHeader as ObsTableHeader, TableRow as ObsTableRow, Tabs as ObsTabs, TabsContent as ObsTabsContent, TabsList as ObsTabsList, TabsTrigger as ObsTabsTrigger, Textarea as ObsTextarea, type TextareaProps as ObsTextareaProps, Toast$1 as ObsToast, ToastAction as ObsToastAction, type ToastActionElement as ObsToastActionElement, ToastClose as ObsToastClose, ToastDescription as ObsToastDescription, type ToastProps as ObsToastProps, ToastProvider as ObsToastProvider, ToastTitle as ObsToastTitle, ToastViewport as ObsToastViewport, Toaster as ObsToaster, Toggle as ObsToggle, ToggleGroup as ObsToggleGroup, ToggleGroupItem as ObsToggleGroupItem, Tooltip as ObsTooltip, TooltipContent as ObsTooltipContent, TooltipProvider as ObsTooltipProvider, TooltipTrigger as ObsTooltipTrigger, obsCn as cn, badgeVariants as obsBadgeVariants, buttonVariants as obsButtonVariants, obsCn, navigationMenuTriggerStyle as obsNavigationMenuTriggerStyle, toast as obsToast, toggleVariants as obsToggleVariants, resolveObsBreakpoint, useObsBreakpoint, useFormField as useObsFormField, useIsMobile as useObsMobile, useSidebar as useObsSidebar, useToast as useObsToast };

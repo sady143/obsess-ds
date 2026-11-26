@@ -1,0 +1,8 @@
+@import "../../src/styles/fonts.css";
+@import "../../src/styles/tokens.css";
+@import "../../src/styles/grid.css";
+@import "../../src/styles/patterns.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

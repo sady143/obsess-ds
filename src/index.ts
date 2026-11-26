@@ -1,6 +1,7 @@
 // Obsess Design System (@sady143/obsess-ds)
-// Utilities
+// Utilities & Tokens
 export { obsCn, cn } from "./lib/obs-utils";
+export { OBS_COLORS, type ObsColorToken, type ObsColorGroup } from "./lib/obs-colors";
 
 // Hooks
 export { useIsMobile as useObsMobile } from "./hooks/obs-use-mobile";
@@ -21,6 +22,30 @@ export {
   ObsNDABanner,
   type ObsNoticeBannerProps,
 } from "./components/patterns/obs-notice-banner";
+export {
+  OBS_GRID_BREAKPOINTS,
+  resolveObsBreakpoint,
+  useObsBreakpoint,
+  ObsGridContainer,
+  ObsGrid,
+  ObsGridItem,
+  ObsGridOverlay,
+  type ObsBreakpoint,
+  type ObsBreakpointSpec,
+  type ObsBreakpointState,
+  type ObsGridContainerProps,
+  type ObsGridProps,
+  type ObsGridSpanValue,
+  type ObsResponsiveSpan,
+  type ObsResponsiveStart,
+  type ObsGridItemProps,
+  type ObsGridOverlayProps,
+} from "./components/patterns/obs-grid";
+export {
+  ObsModal,
+  type ObsModalProps,
+  type ObsModalSize,
+} from "./components/patterns/obs-modal";
 
 // UI Primitives (obs-* prefixed)
 export {

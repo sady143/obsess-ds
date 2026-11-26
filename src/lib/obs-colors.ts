@@ -1,0 +1,346 @@
+export type ObsColorGroup =
+  | "brand"
+  | "semantic"
+  | "neutral"
+  | "sidebar"
+  | "surface";
+
+export interface ObsColorToken {
+  name: string;
+  token: string;
+  hsl?: string;
+  hex?: string;
+  value: string;
+  group: ObsColorGroup;
+  usage: string;
+}
+
+/**
+ * Equal-weight color registry for Obsess Design System (@sady143/obsess-ds).
+ * Covers all brand/editorial, semantic UI, neutral ramp, dark sidebar, and glass surface colors.
+ */
+export const OBS_COLORS: readonly ObsColorToken[] = [
+  // Equal-Weight Brand & Editorial Colors
+  {
+    name: "Terracotta",
+    token: "--obs-terracotta",
+    hsl: "14 75% 46%",
+    hex: "#CD461D",
+    value: "hsl(14 75% 46%)",
+    group: "brand",
+    usage: "Eyebrows, marquee text, active sidebar nav, NDA/notice banners, quote borders, CTA highlights, focus rings",
+  },
+  {
+    name: "Honeybee Yellow",
+    token: "--obs-honeybee",
+    hsl: "42 93% 65%",
+    hex: "#F9C750",
+    value: "hsl(42 93% 65%)",
+    group: "brand",
+    usage: "Full-width manifesto band background and dashed SVG flight trail",
+  },
+  {
+    name: "Celebration Gold",
+    token: "--obs-gold",
+    hsl: "43 89% 38%",
+    hex: "#B8860B",
+    value: "hsl(43 89% 38%)",
+    group: "brand",
+    usage: "Milestone announcement link and focus outline in site masthead",
+  },
+  {
+    name: "Celebration Gold Hover",
+    token: "--obs-gold-hover",
+    hsl: "39 72% 37%",
+    hex: "#A3741A",
+    value: "hsl(39 72% 37%)",
+    group: "brand",
+    usage: "Hover state for celebration gold links and accents",
+  },
+  {
+    name: "Editorial Link Blue",
+    token: "--obs-editorial-blue",
+    hsl: "216 89% 53%",
+    hex: "#1D72F2",
+    value: "hsl(216 89% 53%)",
+    group: "brand",
+    usage: "Highlighted inline editorial links and interactive callouts",
+  },
+  {
+    name: "Love Red",
+    token: "--obs-love",
+    hsl: "0 84% 60%",
+    hex: "#EF4444",
+    value: "hsl(0 84% 60%)",
+    group: "brand",
+    usage: "Interactive Send Love heart button, active ring, and tint",
+  },
+  {
+    name: "Love Red Soft",
+    token: "--obs-love-soft",
+    hsl: "0 91% 71%",
+    hex: "#F87171",
+    value: "hsl(0 91% 71%)",
+    group: "brand",
+    usage: "Soft heart highlight, hover ring, and subtle red accents",
+  },
+  {
+    name: "Crimson Destructive",
+    token: "--obs-crimson",
+    hsl: "0 72% 51%",
+    hex: "#DC2828",
+    value: "hsl(0 72% 51%)",
+    group: "brand",
+    usage: "Form validation errors, destructive buttons, and error alerts",
+  },
+  {
+    name: "Warm Cream",
+    token: "--obs-cream",
+    hsl: "37 30% 95%",
+    hex: "#F6F3EE",
+    value: "hsl(37 30% 95%)",
+    group: "brand",
+    usage: "Warm off-white foreground on terracotta, gold, and crimson surfaces",
+  },
+  {
+    name: "Warm Parchment",
+    token: "--obs-parchment",
+    hsl: "37 30% 92%",
+    hex: "#F0ECE4",
+    value: "hsl(37 30% 92%)",
+    group: "brand",
+    usage: "Warm cream text on dark sidebar and editorial dark bands",
+  },
+
+  // Semantic UI Tokens
+  {
+    name: "Background / Card / Popover",
+    token: "--background",
+    hsl: "0 0% 100%",
+    hex: "#FFFFFF",
+    value: "hsl(0 0% 100%)",
+    group: "semantic",
+    usage: "Page canvas, cards, org-tree nodes, dialog/popover surfaces",
+  },
+  {
+    name: "Foreground / Primary",
+    token: "--foreground",
+    hsl: "0 0% 10%",
+    hex: "#1A1A1A",
+    value: "hsl(0 0% 10%)",
+    group: "semantic",
+    usage: "Primary body copy, headings, icons, primary CTA buttons",
+  },
+  {
+    name: "Primary Foreground",
+    token: "--primary-foreground",
+    hsl: "0 0% 98%",
+    hex: "#FAFAFA",
+    value: "hsl(0 0% 98%)",
+    group: "semantic",
+    usage: "Label text on primary buttons",
+  },
+  {
+    name: "Secondary / Muted",
+    token: "--secondary",
+    hsl: "0 0% 96%",
+    hex: "#F5F5F5",
+    value: "hsl(0 0% 96%)",
+    group: "semantic",
+    usage: "Secondary buttons, hover fills, gallery backdrops, skeletons",
+  },
+  {
+    name: "Secondary Foreground",
+    token: "--secondary-foreground",
+    hsl: "0 0% 12%",
+    hex: "#1F1F1F",
+    value: "hsl(0 0% 12%)",
+    group: "semantic",
+    usage: "Text on secondary surfaces",
+  },
+  {
+    name: "Muted Foreground",
+    token: "--muted-foreground",
+    hsl: "0 0% 45%",
+    hex: "#737373",
+    value: "hsl(0 0% 45%)",
+    group: "semantic",
+    usage: "Captions, metadata, descriptions, inactive navigation links",
+  },
+  {
+    name: "Border / Input",
+    token: "--border",
+    hsl: "0 0% 88%",
+    hex: "#E0E0E0",
+    value: "hsl(0 0% 88%)",
+    group: "semantic",
+    usage: "Default dividers, card/table outlines, form field borders",
+  },
+
+  // Editorial Neutral Ramp
+  {
+    name: "Black",
+    token: "--obs-black",
+    hsl: "0 0% 0%",
+    hex: "#000000",
+    value: "hsl(0 0% 0%)",
+    group: "neutral",
+    usage: "Fullscreen gallery lightbox backdrop and deepest contrast",
+  },
+  {
+    name: "Obsidian (Neutral 950)",
+    token: "--obs-neutral-950",
+    hsl: "0 0% 4%",
+    hex: "#0A0A0A",
+    value: "hsl(0 0% 4%)",
+    group: "neutral",
+    usage: "ObsMarquee dark band and high-contrast editorial sections",
+  },
+  {
+    name: "Neutral 900",
+    token: "--obs-neutral-900",
+    hsl: "0 0% 9%",
+    hex: "#171717",
+    value: "hsl(0 0% 9%)",
+    group: "neutral",
+    usage: "High-contrast hero & story typography",
+  },
+  {
+    name: "Neutral 800",
+    token: "--obs-neutral-800",
+    hsl: "0 0% 15%",
+    hex: "#262626",
+    value: "hsl(0 0% 15%)",
+    group: "neutral",
+    usage: "Scrolled masthead text, focus outlines",
+  },
+  {
+    name: "Neutral 700",
+    token: "--obs-neutral-700",
+    hsl: "0 0% 25%",
+    hex: "#404040",
+    value: "hsl(0 0% 25%)",
+    group: "neutral",
+    usage: "Secondary dark editorial copy",
+  },
+  {
+    name: "Neutral 600",
+    token: "--obs-neutral-600",
+    hsl: "0 0% 32%",
+    hex: "#525252",
+    value: "hsl(0 0% 32%)",
+    group: "neutral",
+    usage: "Breadcrumbs and masthead resting links",
+  },
+  {
+    name: "Neutral 500",
+    token: "--obs-neutral-500",
+    hsl: "0 0% 45%",
+    hex: "#737373",
+    value: "hsl(0 0% 45%)",
+    group: "neutral",
+    usage: "Mid-tone editorial captions and metadata",
+  },
+  {
+    name: "Neutral 400",
+    token: "--obs-neutral-400",
+    hsl: "0 0% 64%",
+    hex: "#A3A3A3",
+    value: "hsl(0 0% 64%)",
+    group: "neutral",
+    usage: "Breadcrumb separators and subtle icons",
+  },
+  {
+    name: "Neutral 300",
+    token: "--obs-neutral-300",
+    hsl: "0 0% 83%",
+    hex: "#D4D4D4",
+    value: "hsl(0 0% 83%)",
+    group: "neutral",
+    usage: "Photo frames and soft structural hairlines",
+  },
+  {
+    name: "Neutral 200",
+    token: "--obs-neutral-200",
+    hsl: "0 0% 90%",
+    hex: "#E5E5E5",
+    value: "hsl(0 0% 90%)",
+    group: "neutral",
+    usage: "Masthead bottom border and secondary dividers",
+  },
+  {
+    name: "Neutral 100",
+    token: "--obs-neutral-100",
+    hsl: "0 0% 96%",
+    hex: "#F5F5F5",
+    value: "hsl(0 0% 96%)",
+    group: "neutral",
+    usage: "Soft light backdrops and subtle frame fills",
+  },
+
+  // Dark Sidebar Palette
+  {
+    name: "Sidebar Background",
+    token: "--sidebar-background",
+    hsl: "0 0% 8%",
+    hex: "#141414",
+    value: "hsl(0 0% 8%)",
+    group: "sidebar",
+    usage: "Dark sidebar surface (ObsSidebar)",
+  },
+  {
+    name: "Sidebar Accent",
+    token: "--sidebar-accent",
+    hsl: "0 0% 14%",
+    hex: "#242424",
+    value: "hsl(0 0% 14%)",
+    group: "sidebar",
+    usage: "Hover and selected row fill in dark sidebar",
+  },
+  {
+    name: "Sidebar Border",
+    token: "--sidebar-border",
+    hsl: "0 0% 18%",
+    hex: "#2E2E2E",
+    value: "hsl(0 0% 18%)",
+    group: "sidebar",
+    usage: "Dividers inside dark sidebar",
+  },
+
+  // Glass & Elevation Surfaces
+  {
+    name: "Glass Fill",
+    token: "--obs-glass-fill",
+    value: "rgba(255, 255, 255, 0.45)",
+    group: "surface",
+    usage: "Frosted glass tile surface (.obs-glass-tile default)",
+  },
+  {
+    name: "Glass Fill Hover",
+    token: "--obs-glass-fill-hover",
+    value: "rgba(255, 255, 255, 0.65)",
+    group: "surface",
+    usage: "Frosted glass tile hover state",
+  },
+  {
+    name: "Glass Border",
+    token: "--obs-glass-border",
+    value: "rgba(0, 0, 0, 0.06)",
+    group: "surface",
+    usage: "Subtle hairline tile border",
+  },
+  {
+    name: "Story Shadow",
+    token: "--obs-shadow-story",
+    value: "rgba(0, 0, 0, 0.14)",
+    group: "surface",
+    usage: "Editorial story photo elevation shadow",
+  },
+  {
+    name: "Float Shadow",
+    token: "--obs-shadow-float",
+    value: "rgba(0, 0, 0, 0.22)",
+    group: "surface",
+    usage: "Floating overlay drop shadow (ScrollBeeOverlay)",
+  },
+] as const;

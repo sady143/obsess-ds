@@ -20,6 +20,15 @@ var obsessTailwindPreset = {
       }
     },
     extend: {
+      screens: {
+        medium: "600px",
+        expanded: "840px",
+        large: "1200px"
+      },
+      spacing: {
+        "obs-gutter": "var(--obs-grid-gutter)",
+        "obs-margin": "var(--obs-grid-margin)"
+      },
       fontFamily: {
         display: ["Cormorant Garamond", "serif"],
         body: ["DM Sans", "sans-serif"],
@@ -76,6 +85,64 @@ var obsessTailwindPreset = {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))"
+        },
+        terracotta: {
+          DEFAULT: "hsl(var(--obs-terracotta))",
+          foreground: "hsl(var(--obs-terracotta-foreground))"
+        },
+        honeybee: {
+          DEFAULT: "hsl(var(--obs-honeybee))",
+          foreground: "hsl(var(--obs-honeybee-foreground))"
+        },
+        gold: {
+          DEFAULT: "hsl(var(--obs-gold))",
+          hover: "hsl(var(--obs-gold-hover))",
+          foreground: "hsl(var(--obs-gold-foreground))"
+        },
+        "editorial-blue": {
+          DEFAULT: "hsl(var(--obs-editorial-blue))",
+          foreground: "hsl(var(--obs-editorial-blue-foreground))"
+        },
+        love: {
+          DEFAULT: "hsl(var(--obs-love))",
+          soft: "hsl(var(--obs-love-soft))",
+          foreground: "hsl(var(--obs-love-foreground))"
+        },
+        crimson: {
+          DEFAULT: "hsl(var(--obs-crimson))",
+          foreground: "hsl(var(--obs-crimson-foreground))"
+        },
+        cream: "hsl(var(--obs-cream))",
+        parchment: "hsl(var(--obs-parchment))",
+        obsidian: "hsl(var(--obs-obsidian))",
+        charcoal: "hsl(var(--obs-charcoal))",
+        ink: "hsl(var(--obs-ink))",
+        obs: {
+          terracotta: "hsl(var(--obs-terracotta))",
+          honeybee: "hsl(var(--obs-honeybee))",
+          gold: "hsl(var(--obs-gold))",
+          "gold-hover": "hsl(var(--obs-gold-hover))",
+          "editorial-blue": "hsl(var(--obs-editorial-blue))",
+          love: "hsl(var(--obs-love))",
+          "love-soft": "hsl(var(--obs-love-soft))",
+          crimson: "hsl(var(--obs-crimson))",
+          canvas: "hsl(var(--obs-canvas))",
+          cream: "hsl(var(--obs-cream))",
+          parchment: "hsl(var(--obs-parchment))",
+          black: "hsl(var(--obs-black))",
+          obsidian: "hsl(var(--obs-obsidian))",
+          charcoal: "hsl(var(--obs-charcoal))",
+          ink: "hsl(var(--obs-ink))",
+          950: "hsl(var(--obs-neutral-950))",
+          900: "hsl(var(--obs-neutral-900))",
+          800: "hsl(var(--obs-neutral-800))",
+          700: "hsl(var(--obs-neutral-700))",
+          600: "hsl(var(--obs-neutral-600))",
+          500: "hsl(var(--obs-neutral-500))",
+          400: "hsl(var(--obs-neutral-400))",
+          300: "hsl(var(--obs-neutral-300))",
+          200: "hsl(var(--obs-neutral-200))",
+          100: "hsl(var(--obs-neutral-100))"
         }
       },
       borderRadius: {

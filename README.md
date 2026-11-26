@@ -7,7 +7,7 @@ Editorial typography, semantic HSL color tokens, Tailwind CSS v3 preset, and `ob
 Install directly from GitHub in any React + Tailwind CSS v3 project:
 
 ```bash
-npm install github:sady143/obsess-ds#v0.1.1
+npm install github:sady143/obsess-ds#v0.2.0
 ```
 
 ## Setup
@@ -92,15 +92,21 @@ import { ObsBreadcrumbs } from "@sady143/obsess-ds";
 
 ## Included Exports
 
-- **Foundations**: `obsessTailwindPreset`, `styles.css`, `tokens.css`, `fonts.css`
-- **Utilities & Hooks**: `obsCn` (`cn`), `useObsToast`, `obsToast`, `useObsMobile`
-- **Patterns**: `ObsSiteMasthead`, `ObsFadeIn`, `ObsMarquee`, `ObsBreadcrumbs`, `ObsNoticeBanner`, `ObsNDABanner`
+- **Foundations**: `obsessTailwindPreset`, `styles.css`, `tokens.css`, `fonts.css`, `grid.css`, `OBS_COLORS` (36 equal-weight brand, editorial, semantic, neutral, sidebar, and glass tokens)
+- **4-Breakpoint Grid**: `ObsGrid`, `ObsGridContainer`, `ObsGridItem`, `ObsGridOverlay`, `OBS_GRID_BREAKPOINTS`, `useObsBreakpoint`, `resolveObsBreakpoint`
+  - `compact` (`< 600px`): 4 cols, 16px gutter, 16px margin, fluid
+  - `medium` (`600px – 839px`): 8 cols, 24px gutter, 32px margin, fluid
+  - `expanded` (`840px – 1199px`): 12 cols, 24px gutter, 48px margin, 1200px max-width
+  - `large` (`>= 1200px`): 12 cols, 32px gutter, 64px margin, 1440px max-width
+- **Utilities & Hooks**: `obsCn` (`cn`), `useObsToast`, `obsToast`, `useObsMobile`, `useObsBreakpoint`
+- **Patterns**: `ObsSiteMasthead`, `ObsFadeIn`, `ObsMarquee`, `ObsBreadcrumbs`, `ObsNoticeBanner`, `ObsNDABanner`, `ObsGrid*`, `ObsModal` (form & slot body modal)
 - **UI Primitives (48 modules)**: `ObsAccordion`, `ObsAlert`, `ObsAlertDialog`, `ObsAspectRatio`, `ObsAvatar`, `ObsBadge`, `ObsBreadcrumb`, `ObsButton`, `ObsCalendar`, `ObsCard`, `ObsCarousel`, `ObsChart*`, `ObsCheckbox`, `ObsCollapsible`, `ObsCommand`, `ObsContextMenu`, `ObsDialog`, `ObsDrawer`, `ObsDropdownMenu`, `ObsForm`, `ObsHoverCard`, `ObsInput`, `ObsInputOTP`, `ObsLabel`, `ObsMenubar`, `ObsNavigationMenu`, `ObsPagination`, `ObsPopover`, `ObsProgress`, `ObsRadioGroup`, `ObsResizable*`, `ObsScrollArea`, `ObsSelect`, `ObsSeparator`, `ObsSheet`, `ObsSidebar*`, `ObsSkeleton`, `ObsSlider`, `ObsSonnerToaster`, `ObsSwitch`, `ObsTable`, `ObsTabs`, `ObsTextarea`, `ObsToast*`, `ObsToaster`, `ObsToggle`, `ObsToggleGroup`, `ObsTooltip*`
 
-## Development & Releasing
+## Development, Playground & Releasing
 
 ```bash
 npm install
+npm run dev        # Launch local component & grid playground (Vite)
 npm run typecheck
 npm run build
 ```

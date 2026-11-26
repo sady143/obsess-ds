@@ -3,11 +3,12 @@ import { twMerge } from 'tailwind-merge';
 import * as React34 from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
-import { ChevronDown, ArrowLeft, ArrowRight, Check, X, Search, ChevronRight, Circle, Dot, ChevronUp, PanelLeft, ShieldAlert, MoreHorizontal, ChevronLeft, GripVertical } from 'lucide-react';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
+import { X, ChevronDown, ArrowLeft, ArrowRight, Check, Search, ChevronRight, Circle, Dot, ChevronUp, PanelLeft, ShieldAlert, MoreHorizontal, ChevronLeft, GripVertical } from 'lucide-react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 import * as AspectRatioPrimitive from '@radix-ui/react-aspect-ratio';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { DayPicker } from 'react-day-picker';
@@ -16,7 +17,6 @@ import * as RechartsPrimitive from 'recharts';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import { Command as Command$1 } from 'cmdk';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu';
 import { Drawer as Drawer$1 } from 'vaul';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
@@ -48,6 +48,329 @@ import * as TogglePrimitive from '@radix-ui/react-toggle';
 function obsCn(...inputs) {
   return twMerge(clsx(inputs));
 }
+
+// src/lib/obs-colors.ts
+var OBS_COLORS = [
+  // Equal-Weight Brand & Editorial Colors
+  {
+    name: "Terracotta",
+    token: "--obs-terracotta",
+    hsl: "14 75% 46%",
+    hex: "#CD461D",
+    value: "hsl(14 75% 46%)",
+    group: "brand",
+    usage: "Eyebrows, marquee text, active sidebar nav, NDA/notice banners, quote borders, CTA highlights, focus rings"
+  },
+  {
+    name: "Honeybee Yellow",
+    token: "--obs-honeybee",
+    hsl: "42 93% 65%",
+    hex: "#F9C750",
+    value: "hsl(42 93% 65%)",
+    group: "brand",
+    usage: "Full-width manifesto band background and dashed SVG flight trail"
+  },
+  {
+    name: "Celebration Gold",
+    token: "--obs-gold",
+    hsl: "43 89% 38%",
+    hex: "#B8860B",
+    value: "hsl(43 89% 38%)",
+    group: "brand",
+    usage: "Milestone announcement link and focus outline in site masthead"
+  },
+  {
+    name: "Celebration Gold Hover",
+    token: "--obs-gold-hover",
+    hsl: "39 72% 37%",
+    hex: "#A3741A",
+    value: "hsl(39 72% 37%)",
+    group: "brand",
+    usage: "Hover state for celebration gold links and accents"
+  },
+  {
+    name: "Editorial Link Blue",
+    token: "--obs-editorial-blue",
+    hsl: "216 89% 53%",
+    hex: "#1D72F2",
+    value: "hsl(216 89% 53%)",
+    group: "brand",
+    usage: "Highlighted inline editorial links and interactive callouts"
+  },
+  {
+    name: "Love Red",
+    token: "--obs-love",
+    hsl: "0 84% 60%",
+    hex: "#EF4444",
+    value: "hsl(0 84% 60%)",
+    group: "brand",
+    usage: "Interactive Send Love heart button, active ring, and tint"
+  },
+  {
+    name: "Love Red Soft",
+    token: "--obs-love-soft",
+    hsl: "0 91% 71%",
+    hex: "#F87171",
+    value: "hsl(0 91% 71%)",
+    group: "brand",
+    usage: "Soft heart highlight, hover ring, and subtle red accents"
+  },
+  {
+    name: "Crimson Destructive",
+    token: "--obs-crimson",
+    hsl: "0 72% 51%",
+    hex: "#DC2828",
+    value: "hsl(0 72% 51%)",
+    group: "brand",
+    usage: "Form validation errors, destructive buttons, and error alerts"
+  },
+  {
+    name: "Warm Cream",
+    token: "--obs-cream",
+    hsl: "37 30% 95%",
+    hex: "#F6F3EE",
+    value: "hsl(37 30% 95%)",
+    group: "brand",
+    usage: "Warm off-white foreground on terracotta, gold, and crimson surfaces"
+  },
+  {
+    name: "Warm Parchment",
+    token: "--obs-parchment",
+    hsl: "37 30% 92%",
+    hex: "#F0ECE4",
+    value: "hsl(37 30% 92%)",
+    group: "brand",
+    usage: "Warm cream text on dark sidebar and editorial dark bands"
+  },
+  // Semantic UI Tokens
+  {
+    name: "Background / Card / Popover",
+    token: "--background",
+    hsl: "0 0% 100%",
+    hex: "#FFFFFF",
+    value: "hsl(0 0% 100%)",
+    group: "semantic",
+    usage: "Page canvas, cards, org-tree nodes, dialog/popover surfaces"
+  },
+  {
+    name: "Foreground / Primary",
+    token: "--foreground",
+    hsl: "0 0% 10%",
+    hex: "#1A1A1A",
+    value: "hsl(0 0% 10%)",
+    group: "semantic",
+    usage: "Primary body copy, headings, icons, primary CTA buttons"
+  },
+  {
+    name: "Primary Foreground",
+    token: "--primary-foreground",
+    hsl: "0 0% 98%",
+    hex: "#FAFAFA",
+    value: "hsl(0 0% 98%)",
+    group: "semantic",
+    usage: "Label text on primary buttons"
+  },
+  {
+    name: "Secondary / Muted",
+    token: "--secondary",
+    hsl: "0 0% 96%",
+    hex: "#F5F5F5",
+    value: "hsl(0 0% 96%)",
+    group: "semantic",
+    usage: "Secondary buttons, hover fills, gallery backdrops, skeletons"
+  },
+  {
+    name: "Secondary Foreground",
+    token: "--secondary-foreground",
+    hsl: "0 0% 12%",
+    hex: "#1F1F1F",
+    value: "hsl(0 0% 12%)",
+    group: "semantic",
+    usage: "Text on secondary surfaces"
+  },
+  {
+    name: "Muted Foreground",
+    token: "--muted-foreground",
+    hsl: "0 0% 45%",
+    hex: "#737373",
+    value: "hsl(0 0% 45%)",
+    group: "semantic",
+    usage: "Captions, metadata, descriptions, inactive navigation links"
+  },
+  {
+    name: "Border / Input",
+    token: "--border",
+    hsl: "0 0% 88%",
+    hex: "#E0E0E0",
+    value: "hsl(0 0% 88%)",
+    group: "semantic",
+    usage: "Default dividers, card/table outlines, form field borders"
+  },
+  // Editorial Neutral Ramp
+  {
+    name: "Black",
+    token: "--obs-black",
+    hsl: "0 0% 0%",
+    hex: "#000000",
+    value: "hsl(0 0% 0%)",
+    group: "neutral",
+    usage: "Fullscreen gallery lightbox backdrop and deepest contrast"
+  },
+  {
+    name: "Obsidian (Neutral 950)",
+    token: "--obs-neutral-950",
+    hsl: "0 0% 4%",
+    hex: "#0A0A0A",
+    value: "hsl(0 0% 4%)",
+    group: "neutral",
+    usage: "ObsMarquee dark band and high-contrast editorial sections"
+  },
+  {
+    name: "Neutral 900",
+    token: "--obs-neutral-900",
+    hsl: "0 0% 9%",
+    hex: "#171717",
+    value: "hsl(0 0% 9%)",
+    group: "neutral",
+    usage: "High-contrast hero & story typography"
+  },
+  {
+    name: "Neutral 800",
+    token: "--obs-neutral-800",
+    hsl: "0 0% 15%",
+    hex: "#262626",
+    value: "hsl(0 0% 15%)",
+    group: "neutral",
+    usage: "Scrolled masthead text, focus outlines"
+  },
+  {
+    name: "Neutral 700",
+    token: "--obs-neutral-700",
+    hsl: "0 0% 25%",
+    hex: "#404040",
+    value: "hsl(0 0% 25%)",
+    group: "neutral",
+    usage: "Secondary dark editorial copy"
+  },
+  {
+    name: "Neutral 600",
+    token: "--obs-neutral-600",
+    hsl: "0 0% 32%",
+    hex: "#525252",
+    value: "hsl(0 0% 32%)",
+    group: "neutral",
+    usage: "Breadcrumbs and masthead resting links"
+  },
+  {
+    name: "Neutral 500",
+    token: "--obs-neutral-500",
+    hsl: "0 0% 45%",
+    hex: "#737373",
+    value: "hsl(0 0% 45%)",
+    group: "neutral",
+    usage: "Mid-tone editorial captions and metadata"
+  },
+  {
+    name: "Neutral 400",
+    token: "--obs-neutral-400",
+    hsl: "0 0% 64%",
+    hex: "#A3A3A3",
+    value: "hsl(0 0% 64%)",
+    group: "neutral",
+    usage: "Breadcrumb separators and subtle icons"
+  },
+  {
+    name: "Neutral 300",
+    token: "--obs-neutral-300",
+    hsl: "0 0% 83%",
+    hex: "#D4D4D4",
+    value: "hsl(0 0% 83%)",
+    group: "neutral",
+    usage: "Photo frames and soft structural hairlines"
+  },
+  {
+    name: "Neutral 200",
+    token: "--obs-neutral-200",
+    hsl: "0 0% 90%",
+    hex: "#E5E5E5",
+    value: "hsl(0 0% 90%)",
+    group: "neutral",
+    usage: "Masthead bottom border and secondary dividers"
+  },
+  {
+    name: "Neutral 100",
+    token: "--obs-neutral-100",
+    hsl: "0 0% 96%",
+    hex: "#F5F5F5",
+    value: "hsl(0 0% 96%)",
+    group: "neutral",
+    usage: "Soft light backdrops and subtle frame fills"
+  },
+  // Dark Sidebar Palette
+  {
+    name: "Sidebar Background",
+    token: "--sidebar-background",
+    hsl: "0 0% 8%",
+    hex: "#141414",
+    value: "hsl(0 0% 8%)",
+    group: "sidebar",
+    usage: "Dark sidebar surface (ObsSidebar)"
+  },
+  {
+    name: "Sidebar Accent",
+    token: "--sidebar-accent",
+    hsl: "0 0% 14%",
+    hex: "#242424",
+    value: "hsl(0 0% 14%)",
+    group: "sidebar",
+    usage: "Hover and selected row fill in dark sidebar"
+  },
+  {
+    name: "Sidebar Border",
+    token: "--sidebar-border",
+    hsl: "0 0% 18%",
+    hex: "#2E2E2E",
+    value: "hsl(0 0% 18%)",
+    group: "sidebar",
+    usage: "Dividers inside dark sidebar"
+  },
+  // Glass & Elevation Surfaces
+  {
+    name: "Glass Fill",
+    token: "--obs-glass-fill",
+    value: "rgba(255, 255, 255, 0.45)",
+    group: "surface",
+    usage: "Frosted glass tile surface (.obs-glass-tile default)"
+  },
+  {
+    name: "Glass Fill Hover",
+    token: "--obs-glass-fill-hover",
+    value: "rgba(255, 255, 255, 0.65)",
+    group: "surface",
+    usage: "Frosted glass tile hover state"
+  },
+  {
+    name: "Glass Border",
+    token: "--obs-glass-border",
+    value: "rgba(0, 0, 0, 0.06)",
+    group: "surface",
+    usage: "Subtle hairline tile border"
+  },
+  {
+    name: "Story Shadow",
+    token: "--obs-shadow-story",
+    value: "rgba(0, 0, 0, 0.14)",
+    group: "surface",
+    usage: "Editorial story photo elevation shadow"
+  },
+  {
+    name: "Float Shadow",
+    token: "--obs-shadow-float",
+    value: "rgba(0, 0, 0, 0.22)",
+    group: "surface",
+    usage: "Floating overlay drop shadow (ScrollBeeOverlay)"
+  }
+];
 var MOBILE_BREAKPOINT = 768;
 function useIsMobile() {
   const [isMobile, setIsMobile] = React34.useState(void 0);
@@ -349,35 +672,137 @@ var ObsNoticeBanner = ({ children, icon, className }) => /* @__PURE__ */ jsxs(
   }
 );
 var ObsNDABanner = ({ className }) => /* @__PURE__ */ jsx(ObsNoticeBanner, { className, children: "This project is under NDA. Details have been generalized to respect confidentiality agreements." });
-var Accordion = AccordionPrimitive.Root;
-var AccordionItem = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Item, { ref, className: obsCn("border-b", className), ...props }));
-AccordionItem.displayName = "AccordionItem";
-var AccordionTrigger = React34.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "flex", children: /* @__PURE__ */ jsxs(
-  AccordionPrimitive.Trigger,
-  {
-    ref,
-    className: obsCn(
-      "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
-      className
-    ),
-    ...props,
-    children: [
-      children,
-      /* @__PURE__ */ jsx(ChevronDown, { className: "h-4 w-4 shrink-0 transition-transform duration-200" })
-    ]
+var OBS_GRID_BREAKPOINTS = {
+  compact: {
+    key: "compact",
+    label: "Compact (Mobile)",
+    minWidth: 0,
+    maxWidthLabel: "< 600px",
+    columns: 4,
+    gutter: 16,
+    margin: 16,
+    maxContainerWidth: null
+  },
+  medium: {
+    key: "medium",
+    label: "Medium (Tablet)",
+    minWidth: 600,
+    maxWidthLabel: "600px \u2013 839px",
+    columns: 8,
+    gutter: 24,
+    margin: 32,
+    maxContainerWidth: null
+  },
+  expanded: {
+    key: "expanded",
+    label: "Expanded (Desktop)",
+    minWidth: 840,
+    maxWidthLabel: "840px \u2013 1199px",
+    columns: 12,
+    gutter: 24,
+    margin: 48,
+    maxContainerWidth: 1200
+  },
+  large: {
+    key: "large",
+    label: "Large (Wide Desktop)",
+    minWidth: 1200,
+    maxWidthLabel: ">= 1200px",
+    columns: 12,
+    gutter: 32,
+    margin: 64,
+    maxContainerWidth: 1440
   }
-) }));
-AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
-var AccordionContent = React34.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
-  AccordionPrimitive.Content,
+};
+function resolveObsBreakpoint(width) {
+  if (width >= OBS_GRID_BREAKPOINTS.large.minWidth) return "large";
+  if (width >= OBS_GRID_BREAKPOINTS.expanded.minWidth) return "expanded";
+  if (width >= OBS_GRID_BREAKPOINTS.medium.minWidth) return "medium";
+  return "compact";
+}
+function useObsBreakpoint() {
+  const getState = () => {
+    const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const key = resolveObsBreakpoint(viewportWidth);
+    return { ...OBS_GRID_BREAKPOINTS[key], viewportWidth };
+  };
+  const [state, setState] = useState(getState);
+  useEffect(() => {
+    const onResize = () => setState(getState());
+    onResize();
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return state;
+}
+var ObsGridContainer = ({
+  children,
+  fluid = false,
+  as: Component = "div",
+  className,
+  style
+}) => /* @__PURE__ */ jsx(
+  Component,
   {
-    ref,
-    className: "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
-    ...props,
-    children: /* @__PURE__ */ jsx("div", { className: obsCn("pb-4 pt-0", className), children })
+    className: obsCn("obs-grid-container", fluid && "obs-grid-container--fluid", className),
+    style,
+    children
   }
-));
-AccordionContent.displayName = AccordionPrimitive.Content.displayName;
+);
+var ObsGrid = ({
+  children,
+  contained = true,
+  fluid = false,
+  as: Component = "div",
+  className,
+  containerClassName,
+  style
+}) => {
+  const grid = /* @__PURE__ */ jsx(Component, { className: obsCn("obs-grid", className), style, children });
+  if (!contained) return grid;
+  return /* @__PURE__ */ jsx(ObsGridContainer, { fluid, className: containerClassName, children: grid });
+};
+var ObsGridItem = ({
+  children,
+  span = "full",
+  start,
+  as: Component = "div",
+  className,
+  style
+}) => {
+  const spanMap = typeof span === "object" ? span : { compact: span };
+  const startMap = typeof start === "object" ? start : start !== void 0 ? { compact: start } : {};
+  const cssVars = {};
+  const dataAttrs = {};
+  const breakpoints = ["compact", "medium", "expanded", "large"];
+  for (const bp of breakpoints) {
+    const bpSpan = spanMap[bp];
+    if (bpSpan === "full") {
+      dataAttrs[`data-full-${bp}`] = "true";
+    } else if (typeof bpSpan === "number") {
+      cssVars[`--obs-span-${bp}`] = bpSpan;
+      dataAttrs[`data-full-${bp}`] = "false";
+    }
+    const bpStart = startMap[bp];
+    if (typeof bpStart === "number") {
+      cssVars[`--obs-start-${bp}`] = bpStart;
+    }
+  }
+  return /* @__PURE__ */ jsx(
+    Component,
+    {
+      ...dataAttrs,
+      className: obsCn("obs-grid-item", className),
+      style: { ...cssVars, ...style },
+      children
+    }
+  );
+};
+var ObsGridOverlay = ({ visible = false, fluid = false, className }) => {
+  const { columns } = useObsBreakpoint();
+  if (!visible) return null;
+  return /* @__PURE__ */ jsx("div", { "aria-hidden": true, className: obsCn("obs-grid-overlay", className), children: /* @__PURE__ */ jsx(ObsGridContainer, { fluid, className: "h-full", children: /* @__PURE__ */ jsx("div", { className: "obs-grid h-full", children: Array.from({ length: columns }, (_, index) => /* @__PURE__ */ jsx("div", { className: "obs-grid-overlay__column" }, index)) }) }) });
+};
 var buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
@@ -410,6 +835,155 @@ var Button = React34.forwardRef(
   }
 );
 Button.displayName = "Button";
+var Dialog = DialogPrimitive.Root;
+var DialogTrigger = DialogPrimitive.Trigger;
+var DialogPortal = DialogPrimitive.Portal;
+var DialogClose = DialogPrimitive.Close;
+var DialogOverlay = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  DialogPrimitive.Overlay,
+  {
+    ref,
+    className: obsCn(
+      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    ),
+    ...props
+  }
+));
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+var DialogContent = React34.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(DialogPortal, { children: [
+  /* @__PURE__ */ jsx(DialogOverlay, {}),
+  /* @__PURE__ */ jsxs(
+    DialogPrimitive.Content,
+    {
+      ref,
+      className: obsCn(
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        className
+      ),
+      ...props,
+      children: [
+        children,
+        /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none", children: [
+          /* @__PURE__ */ jsx(X, { className: "h-4 w-4" }),
+          /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
+        ] })
+      ]
+    }
+  )
+] }));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
+var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ jsx("div", { className: obsCn("flex flex-col space-y-1.5 text-center sm:text-left", className), ...props });
+DialogHeader.displayName = "DialogHeader";
+var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ jsx("div", { className: obsCn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className), ...props });
+DialogFooter.displayName = "DialogFooter";
+var DialogTitle = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  DialogPrimitive.Title,
+  {
+    ref,
+    className: obsCn("text-lg font-semibold leading-none tracking-tight", className),
+    ...props
+  }
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
+var DialogDescription = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, { ref, className: obsCn("text-sm text-muted-foreground", className), ...props }));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
+var SIZE_CLASSES = {
+  sm: "sm:max-w-sm",
+  md: "sm:max-w-lg",
+  lg: "sm:max-w-2xl",
+  xl: "sm:max-w-4xl",
+  full: "sm:max-w-[calc(100vw-2rem)]"
+};
+var ObsModal = ({
+  open,
+  onOpenChange,
+  defaultOpen,
+  trigger,
+  eyebrow,
+  title,
+  description,
+  children,
+  footer,
+  onSubmit,
+  submitLabel = "Save",
+  cancelLabel = "Cancel",
+  submitting = false,
+  submitVariant = "default",
+  size = "md",
+  scrollable = true,
+  className,
+  bodyClassName
+}) => {
+  const hasHeader = Boolean(eyebrow || title || description);
+  const resolvedFooter = footer !== void 0 ? /* @__PURE__ */ jsx(DialogFooter, { className: "shrink-0 pt-2", children: footer }) : onSubmit ? /* @__PURE__ */ jsxs(DialogFooter, { className: "shrink-0 pt-2", children: [
+    /* @__PURE__ */ jsx(DialogClose, { asChild: true, children: /* @__PURE__ */ jsx(Button, { type: "button", variant: "outline", disabled: submitting, children: cancelLabel }) }),
+    /* @__PURE__ */ jsx(Button, { type: "submit", variant: submitVariant, disabled: submitting, children: submitting ? "Saving..." : submitLabel })
+  ] }) : null;
+  const body = /* @__PURE__ */ jsx(
+    "div",
+    {
+      className: obsCn(
+        "min-w-0 flex-1",
+        scrollable && "overflow-y-auto pr-1",
+        bodyClassName
+      ),
+      children
+    }
+  );
+  const innerContent = /* @__PURE__ */ jsxs(Fragment, { children: [
+    hasHeader && /* @__PURE__ */ jsxs(DialogHeader, { className: "shrink-0", children: [
+      eyebrow && /* @__PURE__ */ jsx("p", { className: "font-body text-xs font-medium uppercase tracking-widest text-accent", children: eyebrow }),
+      title && /* @__PURE__ */ jsx(DialogTitle, { className: "font-display text-2xl", children: title }),
+      description && /* @__PURE__ */ jsx(DialogDescription, { children: description })
+    ] }),
+    body,
+    resolvedFooter
+  ] });
+  return /* @__PURE__ */ jsxs(Dialog, { open, onOpenChange, defaultOpen, children: [
+    trigger && /* @__PURE__ */ jsx(DialogTrigger, { asChild: true, children: trigger }),
+    /* @__PURE__ */ jsx(
+      DialogContent,
+      {
+        className: obsCn(
+          "flex max-h-[90vh] flex-col gap-4",
+          SIZE_CLASSES[size],
+          className
+        ),
+        children: onSubmit ? /* @__PURE__ */ jsx("form", { onSubmit, className: "flex min-h-0 flex-1 flex-col gap-4", children: innerContent }) : innerContent
+      }
+    )
+  ] });
+};
+var Accordion = AccordionPrimitive.Root;
+var AccordionItem = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Item, { ref, className: obsCn("border-b", className), ...props }));
+AccordionItem.displayName = "AccordionItem";
+var AccordionTrigger = React34.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "flex", children: /* @__PURE__ */ jsxs(
+  AccordionPrimitive.Trigger,
+  {
+    ref,
+    className: obsCn(
+      "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+      className
+    ),
+    ...props,
+    children: [
+      children,
+      /* @__PURE__ */ jsx(ChevronDown, { className: "h-4 w-4 shrink-0 transition-transform duration-200" })
+    ]
+  }
+) }));
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+var AccordionContent = React34.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+  AccordionPrimitive.Content,
+  {
+    ref,
+    className: "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+    ...props,
+    children: /* @__PURE__ */ jsx("div", { className: obsCn("pb-4 pt-0", className), children })
+  }
+));
+AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 var AlertDialog = AlertDialogPrimitive.Root;
 var AlertDialogTrigger = AlertDialogPrimitive.Trigger;
 var AlertDialogPortal = AlertDialogPrimitive.Portal;
@@ -1037,59 +1611,6 @@ Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 var Collapsible = CollapsiblePrimitive.Root;
 var CollapsibleTrigger2 = CollapsiblePrimitive.CollapsibleTrigger;
 var CollapsibleContent2 = CollapsiblePrimitive.CollapsibleContent;
-var Dialog = DialogPrimitive.Root;
-var DialogTrigger = DialogPrimitive.Trigger;
-var DialogPortal = DialogPrimitive.Portal;
-var DialogClose = DialogPrimitive.Close;
-var DialogOverlay = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-  DialogPrimitive.Overlay,
-  {
-    ref,
-    className: obsCn(
-      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-      className
-    ),
-    ...props
-  }
-));
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
-var DialogContent = React34.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(DialogPortal, { children: [
-  /* @__PURE__ */ jsx(DialogOverlay, {}),
-  /* @__PURE__ */ jsxs(
-    DialogPrimitive.Content,
-    {
-      ref,
-      className: obsCn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-        className
-      ),
-      ...props,
-      children: [
-        children,
-        /* @__PURE__ */ jsxs(DialogPrimitive.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none", children: [
-          /* @__PURE__ */ jsx(X, { className: "h-4 w-4" }),
-          /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
-        ] })
-      ]
-    }
-  )
-] }));
-DialogContent.displayName = DialogPrimitive.Content.displayName;
-var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ jsx("div", { className: obsCn("flex flex-col space-y-1.5 text-center sm:text-left", className), ...props });
-DialogHeader.displayName = "DialogHeader";
-var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ jsx("div", { className: obsCn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className), ...props });
-DialogFooter.displayName = "DialogFooter";
-var DialogTitle = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-  DialogPrimitive.Title,
-  {
-    ref,
-    className: obsCn("text-lg font-semibold leading-none tracking-tight", className),
-    ...props
-  }
-));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
-var DialogDescription = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, { ref, className: obsCn("text-sm text-muted-foreground", className), ...props }));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
 var Command = React34.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   Command$1,
   {
@@ -2860,6 +3381,6 @@ var ToggleGroupItem = React34.forwardRef(({ className, children, variant, size, 
 });
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
-export { Accordion as ObsAccordion, AccordionContent as ObsAccordionContent, AccordionItem as ObsAccordionItem, AccordionTrigger as ObsAccordionTrigger, Alert as ObsAlert, AlertDescription as ObsAlertDescription, AlertDialog as ObsAlertDialog, AlertDialogAction as ObsAlertDialogAction, AlertDialogCancel as ObsAlertDialogCancel, AlertDialogContent as ObsAlertDialogContent, AlertDialogDescription as ObsAlertDialogDescription, AlertDialogFooter as ObsAlertDialogFooter, AlertDialogHeader as ObsAlertDialogHeader, AlertDialogOverlay as ObsAlertDialogOverlay, AlertDialogPortal as ObsAlertDialogPortal, AlertDialogTitle as ObsAlertDialogTitle, AlertDialogTrigger as ObsAlertDialogTrigger, AlertTitle as ObsAlertTitle, AspectRatio as ObsAspectRatio, Avatar as ObsAvatar, AvatarFallback as ObsAvatarFallback, AvatarImage as ObsAvatarImage, Badge as ObsBadge, Breadcrumb as ObsBreadcrumb, BreadcrumbEllipsis as ObsBreadcrumbEllipsis, BreadcrumbItem as ObsBreadcrumbItem, BreadcrumbLink as ObsBreadcrumbLink, BreadcrumbList as ObsBreadcrumbList, BreadcrumbPage as ObsBreadcrumbPage, BreadcrumbSeparator as ObsBreadcrumbSeparator, ObsBreadcrumbs, Button as ObsButton, Calendar as ObsCalendar, Card as ObsCard, CardContent as ObsCardContent, CardDescription as ObsCardDescription, CardFooter as ObsCardFooter, CardHeader as ObsCardHeader, CardTitle as ObsCardTitle, Carousel as ObsCarousel, CarouselContent as ObsCarouselContent, CarouselItem as ObsCarouselItem, CarouselNext as ObsCarouselNext, CarouselPrevious as ObsCarouselPrevious, ChartContainer as ObsChartContainer, ChartLegend as ObsChartLegend, ChartLegendContent as ObsChartLegendContent, ChartStyle as ObsChartStyle, ChartTooltip as ObsChartTooltip, ChartTooltipContent as ObsChartTooltipContent, Checkbox as ObsCheckbox, Collapsible as ObsCollapsible, CollapsibleContent2 as ObsCollapsibleContent, CollapsibleTrigger2 as ObsCollapsibleTrigger, Command as ObsCommand, CommandDialog as ObsCommandDialog, CommandEmpty as ObsCommandEmpty, CommandGroup as ObsCommandGroup, CommandInput as ObsCommandInput, CommandItem as ObsCommandItem, CommandList as ObsCommandList, CommandSeparator as ObsCommandSeparator, CommandShortcut as ObsCommandShortcut, ContextMenu as ObsContextMenu, ContextMenuCheckboxItem as ObsContextMenuCheckboxItem, ContextMenuContent as ObsContextMenuContent, ContextMenuGroup as ObsContextMenuGroup, ContextMenuItem as ObsContextMenuItem, ContextMenuLabel as ObsContextMenuLabel, ContextMenuPortal as ObsContextMenuPortal, ContextMenuRadioGroup as ObsContextMenuRadioGroup, ContextMenuRadioItem as ObsContextMenuRadioItem, ContextMenuSeparator as ObsContextMenuSeparator, ContextMenuShortcut as ObsContextMenuShortcut, ContextMenuSub as ObsContextMenuSub, ContextMenuSubContent as ObsContextMenuSubContent, ContextMenuSubTrigger as ObsContextMenuSubTrigger, ContextMenuTrigger as ObsContextMenuTrigger, Dialog as ObsDialog, DialogClose as ObsDialogClose, DialogContent as ObsDialogContent, DialogDescription as ObsDialogDescription, DialogFooter as ObsDialogFooter, DialogHeader as ObsDialogHeader, DialogOverlay as ObsDialogOverlay, DialogPortal as ObsDialogPortal, DialogTitle as ObsDialogTitle, DialogTrigger as ObsDialogTrigger, Drawer as ObsDrawer, DrawerClose as ObsDrawerClose, DrawerContent as ObsDrawerContent, DrawerDescription as ObsDrawerDescription, DrawerFooter as ObsDrawerFooter, DrawerHeader as ObsDrawerHeader, DrawerOverlay as ObsDrawerOverlay, DrawerPortal as ObsDrawerPortal, DrawerTitle as ObsDrawerTitle, DrawerTrigger as ObsDrawerTrigger, DropdownMenu as ObsDropdownMenu, DropdownMenuCheckboxItem as ObsDropdownMenuCheckboxItem, DropdownMenuContent as ObsDropdownMenuContent, DropdownMenuGroup as ObsDropdownMenuGroup, DropdownMenuItem as ObsDropdownMenuItem, DropdownMenuLabel as ObsDropdownMenuLabel, DropdownMenuPortal as ObsDropdownMenuPortal, DropdownMenuRadioGroup as ObsDropdownMenuRadioGroup, DropdownMenuRadioItem as ObsDropdownMenuRadioItem, DropdownMenuSeparator as ObsDropdownMenuSeparator, DropdownMenuShortcut as ObsDropdownMenuShortcut, DropdownMenuSub as ObsDropdownMenuSub, DropdownMenuSubContent as ObsDropdownMenuSubContent, DropdownMenuSubTrigger as ObsDropdownMenuSubTrigger, DropdownMenuTrigger as ObsDropdownMenuTrigger, ObsFadeIn, Form as ObsForm, FormControl as ObsFormControl, FormDescription as ObsFormDescription, FormField as ObsFormField, FormItem as ObsFormItem, FormLabel as ObsFormLabel, FormMessage as ObsFormMessage, HoverCard as ObsHoverCard, HoverCardContent as ObsHoverCardContent, HoverCardTrigger as ObsHoverCardTrigger, Input as ObsInput, InputOTP as ObsInputOTP, InputOTPGroup as ObsInputOTPGroup, InputOTPSeparator as ObsInputOTPSeparator, InputOTPSlot as ObsInputOTPSlot, Label3 as ObsLabel, ObsMarquee, Menubar as ObsMenubar, MenubarCheckboxItem as ObsMenubarCheckboxItem, MenubarContent as ObsMenubarContent, MenubarGroup as ObsMenubarGroup, MenubarItem as ObsMenubarItem, MenubarLabel as ObsMenubarLabel, MenubarMenu as ObsMenubarMenu, MenubarPortal as ObsMenubarPortal, MenubarRadioGroup as ObsMenubarRadioGroup, MenubarRadioItem as ObsMenubarRadioItem, MenubarSeparator as ObsMenubarSeparator, MenubarShortcut as ObsMenubarShortcut, MenubarSub as ObsMenubarSub, MenubarSubContent as ObsMenubarSubContent, MenubarSubTrigger as ObsMenubarSubTrigger, MenubarTrigger as ObsMenubarTrigger, ObsNDABanner, NavigationMenu as ObsNavigationMenu, NavigationMenuContent as ObsNavigationMenuContent, NavigationMenuIndicator as ObsNavigationMenuIndicator, NavigationMenuItem as ObsNavigationMenuItem, NavigationMenuLink as ObsNavigationMenuLink, NavigationMenuList as ObsNavigationMenuList, NavigationMenuTrigger as ObsNavigationMenuTrigger, NavigationMenuViewport as ObsNavigationMenuViewport, ObsNoticeBanner, Pagination as ObsPagination, PaginationContent as ObsPaginationContent, PaginationEllipsis as ObsPaginationEllipsis, PaginationItem as ObsPaginationItem, PaginationLink as ObsPaginationLink, PaginationNext as ObsPaginationNext, PaginationPrevious as ObsPaginationPrevious, Popover as ObsPopover, PopoverContent as ObsPopoverContent, PopoverTrigger as ObsPopoverTrigger, Progress as ObsProgress, RadioGroup4 as ObsRadioGroup, RadioGroupItem as ObsRadioGroupItem, ResizableHandle as ObsResizableHandle, ResizablePanel as ObsResizablePanel, ResizablePanelGroup as ObsResizablePanelGroup, ScrollArea as ObsScrollArea, ScrollBar as ObsScrollBar, Select as ObsSelect, SelectContent as ObsSelectContent, SelectGroup as ObsSelectGroup, SelectItem as ObsSelectItem, SelectLabel as ObsSelectLabel, SelectScrollDownButton as ObsSelectScrollDownButton, SelectScrollUpButton as ObsSelectScrollUpButton, SelectSeparator as ObsSelectSeparator, SelectTrigger as ObsSelectTrigger, SelectValue as ObsSelectValue, Separator5 as ObsSeparator, Sheet as ObsSheet, SheetClose as ObsSheetClose, SheetContent as ObsSheetContent, SheetDescription as ObsSheetDescription, SheetFooter as ObsSheetFooter, SheetHeader as ObsSheetHeader, SheetOverlay as ObsSheetOverlay, SheetPortal as ObsSheetPortal, SheetTitle as ObsSheetTitle, SheetTrigger as ObsSheetTrigger, Sidebar as ObsSidebar, SidebarContent as ObsSidebarContent, SidebarFooter as ObsSidebarFooter, SidebarGroup as ObsSidebarGroup, SidebarGroupAction as ObsSidebarGroupAction, SidebarGroupContent as ObsSidebarGroupContent, SidebarGroupLabel as ObsSidebarGroupLabel, SidebarHeader as ObsSidebarHeader, SidebarInput as ObsSidebarInput, SidebarInset as ObsSidebarInset, SidebarMenu as ObsSidebarMenu, SidebarMenuAction as ObsSidebarMenuAction, SidebarMenuBadge as ObsSidebarMenuBadge, SidebarMenuButton as ObsSidebarMenuButton, SidebarMenuItem as ObsSidebarMenuItem, SidebarMenuSkeleton as ObsSidebarMenuSkeleton, SidebarMenuSub as ObsSidebarMenuSub, SidebarMenuSubButton as ObsSidebarMenuSubButton, SidebarMenuSubItem as ObsSidebarMenuSubItem, SidebarProvider as ObsSidebarProvider, SidebarRail as ObsSidebarRail, SidebarSeparator as ObsSidebarSeparator, SidebarTrigger as ObsSidebarTrigger, ObsSiteMasthead, Skeleton as ObsSkeleton, Slider as ObsSlider, Toaster as ObsSonnerToaster, Switch as ObsSwitch, Table as ObsTable, TableBody as ObsTableBody, TableCaption as ObsTableCaption, TableCell as ObsTableCell, TableFooter as ObsTableFooter, TableHead as ObsTableHead, TableHeader as ObsTableHeader, TableRow as ObsTableRow, Tabs as ObsTabs, TabsContent as ObsTabsContent, TabsList as ObsTabsList, TabsTrigger as ObsTabsTrigger, Textarea as ObsTextarea, Toast as ObsToast, ToastAction as ObsToastAction, ToastClose as ObsToastClose, ToastDescription as ObsToastDescription, ToastProvider as ObsToastProvider, ToastTitle as ObsToastTitle, ToastViewport as ObsToastViewport, Toaster2 as ObsToaster, Toggle as ObsToggle, ToggleGroup as ObsToggleGroup, ToggleGroupItem as ObsToggleGroupItem, Tooltip2 as ObsTooltip, TooltipContent as ObsTooltipContent, TooltipProvider as ObsTooltipProvider, TooltipTrigger as ObsTooltipTrigger, obsCn as cn, badgeVariants as obsBadgeVariants, buttonVariants as obsButtonVariants, obsCn, navigationMenuTriggerStyle as obsNavigationMenuTriggerStyle, toast as obsToast, toggleVariants as obsToggleVariants, useFormField as useObsFormField, useIsMobile as useObsMobile, useSidebar as useObsSidebar, useToast as useObsToast };
+export { OBS_COLORS, OBS_GRID_BREAKPOINTS, Accordion as ObsAccordion, AccordionContent as ObsAccordionContent, AccordionItem as ObsAccordionItem, AccordionTrigger as ObsAccordionTrigger, Alert as ObsAlert, AlertDescription as ObsAlertDescription, AlertDialog as ObsAlertDialog, AlertDialogAction as ObsAlertDialogAction, AlertDialogCancel as ObsAlertDialogCancel, AlertDialogContent as ObsAlertDialogContent, AlertDialogDescription as ObsAlertDialogDescription, AlertDialogFooter as ObsAlertDialogFooter, AlertDialogHeader as ObsAlertDialogHeader, AlertDialogOverlay as ObsAlertDialogOverlay, AlertDialogPortal as ObsAlertDialogPortal, AlertDialogTitle as ObsAlertDialogTitle, AlertDialogTrigger as ObsAlertDialogTrigger, AlertTitle as ObsAlertTitle, AspectRatio as ObsAspectRatio, Avatar as ObsAvatar, AvatarFallback as ObsAvatarFallback, AvatarImage as ObsAvatarImage, Badge as ObsBadge, Breadcrumb as ObsBreadcrumb, BreadcrumbEllipsis as ObsBreadcrumbEllipsis, BreadcrumbItem as ObsBreadcrumbItem, BreadcrumbLink as ObsBreadcrumbLink, BreadcrumbList as ObsBreadcrumbList, BreadcrumbPage as ObsBreadcrumbPage, BreadcrumbSeparator as ObsBreadcrumbSeparator, ObsBreadcrumbs, Button as ObsButton, Calendar as ObsCalendar, Card as ObsCard, CardContent as ObsCardContent, CardDescription as ObsCardDescription, CardFooter as ObsCardFooter, CardHeader as ObsCardHeader, CardTitle as ObsCardTitle, Carousel as ObsCarousel, CarouselContent as ObsCarouselContent, CarouselItem as ObsCarouselItem, CarouselNext as ObsCarouselNext, CarouselPrevious as ObsCarouselPrevious, ChartContainer as ObsChartContainer, ChartLegend as ObsChartLegend, ChartLegendContent as ObsChartLegendContent, ChartStyle as ObsChartStyle, ChartTooltip as ObsChartTooltip, ChartTooltipContent as ObsChartTooltipContent, Checkbox as ObsCheckbox, Collapsible as ObsCollapsible, CollapsibleContent2 as ObsCollapsibleContent, CollapsibleTrigger2 as ObsCollapsibleTrigger, Command as ObsCommand, CommandDialog as ObsCommandDialog, CommandEmpty as ObsCommandEmpty, CommandGroup as ObsCommandGroup, CommandInput as ObsCommandInput, CommandItem as ObsCommandItem, CommandList as ObsCommandList, CommandSeparator as ObsCommandSeparator, CommandShortcut as ObsCommandShortcut, ContextMenu as ObsContextMenu, ContextMenuCheckboxItem as ObsContextMenuCheckboxItem, ContextMenuContent as ObsContextMenuContent, ContextMenuGroup as ObsContextMenuGroup, ContextMenuItem as ObsContextMenuItem, ContextMenuLabel as ObsContextMenuLabel, ContextMenuPortal as ObsContextMenuPortal, ContextMenuRadioGroup as ObsContextMenuRadioGroup, ContextMenuRadioItem as ObsContextMenuRadioItem, ContextMenuSeparator as ObsContextMenuSeparator, ContextMenuShortcut as ObsContextMenuShortcut, ContextMenuSub as ObsContextMenuSub, ContextMenuSubContent as ObsContextMenuSubContent, ContextMenuSubTrigger as ObsContextMenuSubTrigger, ContextMenuTrigger as ObsContextMenuTrigger, Dialog as ObsDialog, DialogClose as ObsDialogClose, DialogContent as ObsDialogContent, DialogDescription as ObsDialogDescription, DialogFooter as ObsDialogFooter, DialogHeader as ObsDialogHeader, DialogOverlay as ObsDialogOverlay, DialogPortal as ObsDialogPortal, DialogTitle as ObsDialogTitle, DialogTrigger as ObsDialogTrigger, Drawer as ObsDrawer, DrawerClose as ObsDrawerClose, DrawerContent as ObsDrawerContent, DrawerDescription as ObsDrawerDescription, DrawerFooter as ObsDrawerFooter, DrawerHeader as ObsDrawerHeader, DrawerOverlay as ObsDrawerOverlay, DrawerPortal as ObsDrawerPortal, DrawerTitle as ObsDrawerTitle, DrawerTrigger as ObsDrawerTrigger, DropdownMenu as ObsDropdownMenu, DropdownMenuCheckboxItem as ObsDropdownMenuCheckboxItem, DropdownMenuContent as ObsDropdownMenuContent, DropdownMenuGroup as ObsDropdownMenuGroup, DropdownMenuItem as ObsDropdownMenuItem, DropdownMenuLabel as ObsDropdownMenuLabel, DropdownMenuPortal as ObsDropdownMenuPortal, DropdownMenuRadioGroup as ObsDropdownMenuRadioGroup, DropdownMenuRadioItem as ObsDropdownMenuRadioItem, DropdownMenuSeparator as ObsDropdownMenuSeparator, DropdownMenuShortcut as ObsDropdownMenuShortcut, DropdownMenuSub as ObsDropdownMenuSub, DropdownMenuSubContent as ObsDropdownMenuSubContent, DropdownMenuSubTrigger as ObsDropdownMenuSubTrigger, DropdownMenuTrigger as ObsDropdownMenuTrigger, ObsFadeIn, Form as ObsForm, FormControl as ObsFormControl, FormDescription as ObsFormDescription, FormField as ObsFormField, FormItem as ObsFormItem, FormLabel as ObsFormLabel, FormMessage as ObsFormMessage, ObsGrid, ObsGridContainer, ObsGridItem, ObsGridOverlay, HoverCard as ObsHoverCard, HoverCardContent as ObsHoverCardContent, HoverCardTrigger as ObsHoverCardTrigger, Input as ObsInput, InputOTP as ObsInputOTP, InputOTPGroup as ObsInputOTPGroup, InputOTPSeparator as ObsInputOTPSeparator, InputOTPSlot as ObsInputOTPSlot, Label3 as ObsLabel, ObsMarquee, Menubar as ObsMenubar, MenubarCheckboxItem as ObsMenubarCheckboxItem, MenubarContent as ObsMenubarContent, MenubarGroup as ObsMenubarGroup, MenubarItem as ObsMenubarItem, MenubarLabel as ObsMenubarLabel, MenubarMenu as ObsMenubarMenu, MenubarPortal as ObsMenubarPortal, MenubarRadioGroup as ObsMenubarRadioGroup, MenubarRadioItem as ObsMenubarRadioItem, MenubarSeparator as ObsMenubarSeparator, MenubarShortcut as ObsMenubarShortcut, MenubarSub as ObsMenubarSub, MenubarSubContent as ObsMenubarSubContent, MenubarSubTrigger as ObsMenubarSubTrigger, MenubarTrigger as ObsMenubarTrigger, ObsModal, ObsNDABanner, NavigationMenu as ObsNavigationMenu, NavigationMenuContent as ObsNavigationMenuContent, NavigationMenuIndicator as ObsNavigationMenuIndicator, NavigationMenuItem as ObsNavigationMenuItem, NavigationMenuLink as ObsNavigationMenuLink, NavigationMenuList as ObsNavigationMenuList, NavigationMenuTrigger as ObsNavigationMenuTrigger, NavigationMenuViewport as ObsNavigationMenuViewport, ObsNoticeBanner, Pagination as ObsPagination, PaginationContent as ObsPaginationContent, PaginationEllipsis as ObsPaginationEllipsis, PaginationItem as ObsPaginationItem, PaginationLink as ObsPaginationLink, PaginationNext as ObsPaginationNext, PaginationPrevious as ObsPaginationPrevious, Popover as ObsPopover, PopoverContent as ObsPopoverContent, PopoverTrigger as ObsPopoverTrigger, Progress as ObsProgress, RadioGroup4 as ObsRadioGroup, RadioGroupItem as ObsRadioGroupItem, ResizableHandle as ObsResizableHandle, ResizablePanel as ObsResizablePanel, ResizablePanelGroup as ObsResizablePanelGroup, ScrollArea as ObsScrollArea, ScrollBar as ObsScrollBar, Select as ObsSelect, SelectContent as ObsSelectContent, SelectGroup as ObsSelectGroup, SelectItem as ObsSelectItem, SelectLabel as ObsSelectLabel, SelectScrollDownButton as ObsSelectScrollDownButton, SelectScrollUpButton as ObsSelectScrollUpButton, SelectSeparator as ObsSelectSeparator, SelectTrigger as ObsSelectTrigger, SelectValue as ObsSelectValue, Separator5 as ObsSeparator, Sheet as ObsSheet, SheetClose as ObsSheetClose, SheetContent as ObsSheetContent, SheetDescription as ObsSheetDescription, SheetFooter as ObsSheetFooter, SheetHeader as ObsSheetHeader, SheetOverlay as ObsSheetOverlay, SheetPortal as ObsSheetPortal, SheetTitle as ObsSheetTitle, SheetTrigger as ObsSheetTrigger, Sidebar as ObsSidebar, SidebarContent as ObsSidebarContent, SidebarFooter as ObsSidebarFooter, SidebarGroup as ObsSidebarGroup, SidebarGroupAction as ObsSidebarGroupAction, SidebarGroupContent as ObsSidebarGroupContent, SidebarGroupLabel as ObsSidebarGroupLabel, SidebarHeader as ObsSidebarHeader, SidebarInput as ObsSidebarInput, SidebarInset as ObsSidebarInset, SidebarMenu as ObsSidebarMenu, SidebarMenuAction as ObsSidebarMenuAction, SidebarMenuBadge as ObsSidebarMenuBadge, SidebarMenuButton as ObsSidebarMenuButton, SidebarMenuItem as ObsSidebarMenuItem, SidebarMenuSkeleton as ObsSidebarMenuSkeleton, SidebarMenuSub as ObsSidebarMenuSub, SidebarMenuSubButton as ObsSidebarMenuSubButton, SidebarMenuSubItem as ObsSidebarMenuSubItem, SidebarProvider as ObsSidebarProvider, SidebarRail as ObsSidebarRail, SidebarSeparator as ObsSidebarSeparator, SidebarTrigger as ObsSidebarTrigger, ObsSiteMasthead, Skeleton as ObsSkeleton, Slider as ObsSlider, Toaster as ObsSonnerToaster, Switch as ObsSwitch, Table as ObsTable, TableBody as ObsTableBody, TableCaption as ObsTableCaption, TableCell as ObsTableCell, TableFooter as ObsTableFooter, TableHead as ObsTableHead, TableHeader as ObsTableHeader, TableRow as ObsTableRow, Tabs as ObsTabs, TabsContent as ObsTabsContent, TabsList as ObsTabsList, TabsTrigger as ObsTabsTrigger, Textarea as ObsTextarea, Toast as ObsToast, ToastAction as ObsToastAction, ToastClose as ObsToastClose, ToastDescription as ObsToastDescription, ToastProvider as ObsToastProvider, ToastTitle as ObsToastTitle, ToastViewport as ObsToastViewport, Toaster2 as ObsToaster, Toggle as ObsToggle, ToggleGroup as ObsToggleGroup, ToggleGroupItem as ObsToggleGroupItem, Tooltip2 as ObsTooltip, TooltipContent as ObsTooltipContent, TooltipProvider as ObsTooltipProvider, TooltipTrigger as ObsTooltipTrigger, obsCn as cn, badgeVariants as obsBadgeVariants, buttonVariants as obsButtonVariants, obsCn, navigationMenuTriggerStyle as obsNavigationMenuTriggerStyle, toast as obsToast, toggleVariants as obsToggleVariants, resolveObsBreakpoint, useObsBreakpoint, useFormField as useObsFormField, useIsMobile as useObsMobile, useSidebar as useObsSidebar, useToast as useObsToast };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
