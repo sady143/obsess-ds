@@ -7,7 +7,7 @@ Editorial typography, semantic HSL color tokens, Tailwind CSS v3 preset, and `ob
 Install directly from GitHub in any React + Tailwind CSS v3 project:
 
 ```bash
-npm install github:sady143/obsess-ds#v0.1.0
+npm install github:sady143/obsess-ds#v0.1.1
 ```
 
 ## Setup

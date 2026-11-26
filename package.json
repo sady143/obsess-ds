@@ -1,23 +1,27 @@
 {
   "name": "@sady143/obsess-ds",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Obsess Design System — editorial typography, semantic tokens, Tailwind preset, and obs-* React UI components.",
   "type": "module",
   "license": "MIT",
   "sideEffects": [
     "**/*.css"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
     },
     "./tailwind-preset": {
       "types": "./dist/tailwind-preset.d.ts",
-      "import": "./dist/tailwind-preset.js"
+      "import": "./dist/tailwind-preset.js",
+      "require": "./dist/tailwind-preset.cjs",
+      "default": "./dist/tailwind-preset.js"
     },
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
